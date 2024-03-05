@@ -8,10 +8,11 @@
         d-flex
         justify-content-between
         align-items-start
+        text-wrap
         {{($groupKey === $activeGroupKey)? 'active ': ''}}
         {{$loop->first? 'border-top': ''}}
     "
 >
-    <div class="fs-8" style="font-size: 0.9rem;">{{$group->name}}</div>
+    <div class="fs-8 text-wrap" style="font-size: 0.9rem;">{{$group->name}}</div>
     <span class="badge text-bg-secondary rounded-pill">10</span>
 </a>
