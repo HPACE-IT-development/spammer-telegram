@@ -1,3 +1,3 @@
 <div class="container mx-auto">
-    СТРАНИЦА РАССЫЛКИ
+    <livewire:action.action-create />
 </div>
