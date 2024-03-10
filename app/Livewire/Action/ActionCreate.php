@@ -3,6 +3,7 @@
 namespace App\Livewire\Action;
 
 use App\Livewire\Forms\ActionCreateForm;
+use App\Livewire\Newsletter;
 use Livewire\Component;
 
 class ActionCreate extends Component
@@ -11,7 +12,11 @@ class ActionCreate extends Component
 
     public function save()
     {
-        $this->form->store();
+        if($this->form->store())
+        {
+            session()->flash('success', 'Рассылка успешно создана, для назначения запуска перейдите Мои боты->задачи');
+            $this->redirect(Newsletter::class);
+        }
     }
 
     public function render()

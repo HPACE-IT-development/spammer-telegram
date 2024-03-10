@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Forms;
 
-use Livewire\Attributes\Validate;
+use App\Models\Action;
+use App\Rules\RecipientsList;
+use Illuminate\Support\Facades\Log;
 use Livewire\Form;
 
 class ActionCreateForm extends Form
@@ -14,8 +16,8 @@ class ActionCreateForm extends Form
     public function rules(): array
     {
         return [
-            'recipients' => ['required'],
-            'text' => ['required', 'max:5']
+            'recipients' => ['required', new RecipientsList()],
+            'text' => ['required', 'max:4096']
         ];
     }
 
@@ -27,8 +29,19 @@ class ActionCreateForm extends Form
         ];
     }
 
-    public function store()
+    public function store(): ?Action
     {
-        $this->validate();
+        $attributes = $this->validate();
+
+        $recipientsJSON = json_encode(array_map(function ($elem) {
+            return  trim($elem);
+        }, explode(',', $attributes['recipients'])));
+
+        return Action::create([
+            'recipients' => $recipientsJSON,
+            'text' => $attributes['text'],
+            'user_id' => auth()->id(),
+            'action_type_id' => 1
+        ]);
     }
 }

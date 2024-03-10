@@ -4,7 +4,7 @@ use App\Enums\TelegramAuthStatusEnum;
 
 ?>
 
-<div class="w-75 mx-auto mt-3">
+<div wire:transition class="w-75 mx-auto mt-3">
     <form
         @if(!$bot)
             wire:submit="phoneLogin"

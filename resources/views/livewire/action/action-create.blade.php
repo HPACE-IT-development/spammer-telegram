@@ -1,4 +1,11 @@
 <div class="pt-3">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{session('success')}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <h2 class="h2 text-center mb-5">Добавить рассылку</h2>
     <form wire:submit="save" class="mx-auto w-25" action="">
         <div class="mb-3">
