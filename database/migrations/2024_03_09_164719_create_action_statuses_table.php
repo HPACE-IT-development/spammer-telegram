@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('action_types', function (Blueprint $table) {
+        Schema::create('action_statuses', function (Blueprint $table) {
             $table->unsignedTinyInteger('id')->autoIncrement();
             $table->string('title', 32);
             $table->string('description', 32);
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('action_types');
+        Schema::dropIfExists('action_statuses');
     }
 };

@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
 
          $this->call([
              BotStatusSeeder::class,
-             ActionTypeSeeder::class
+             ActionTypeSeeder::class,
+             ActionStatusSeeder::class
          ]);
 
          \App\Models\Bot::factory(6)->create();

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->nullableMorphs('actionable');
             $table->unsignedTinyInteger('action_type_id');
+            $table->unsignedTinyInteger('action_status_id')->default(1);
             $table->timestamps();
 
             $table->foreign('user_id')
@@ -27,6 +28,10 @@ return new class extends Migration
             $table->foreign('action_type_id')
                 ->references('id')
                 ->on('action_types')
+                ->onDelete('cascade');
+            $table->foreign('action_status_id')
+                ->references('id')
+                ->on('action_statuses')
                 ->onDelete('cascade');
         });
     }

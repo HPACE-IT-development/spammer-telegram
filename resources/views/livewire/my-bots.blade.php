@@ -10,6 +10,10 @@
                 <livewire:bot.bot-create />
             @break
 
+            @case('jobs')
+                <livewire:action.action-index />
+                @break
+
             @case('settings')
                 <livewire:bot.settings />
             @break
