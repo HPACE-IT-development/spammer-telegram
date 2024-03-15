@@ -14,11 +14,14 @@ class ActionIndex extends Component
     public string $displayedStatus = 'created';
     public array $displayedTypes = [];
 
+    public ?Action $activeAction;
+
     public Collection $statuses;
 
     public function mount(): void
     {
         $this->statuses = ActionStatus::all();
+        $this->activeAction = ($this->actions->isNotEmpty())? $this->actions->first(): null;
     }
 
     #[Computed]
@@ -37,6 +40,11 @@ class ActionIndex extends Component
         }
 
         return $builder->get();
+    }
+
+    public function toggleActiveAction($id): void
+    {
+        $this->activeAction = Action::where('id', $id)->first();
     }
 
     public function filter(): void

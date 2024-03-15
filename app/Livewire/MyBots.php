@@ -13,7 +13,7 @@ class MyBots extends Component
         'settings' => 'Настройки'
     ];
 
-    public string $activePane = 'create';
+    public string $activePane = 'jobs';
 
     public function showPane($paneKey): void
     {

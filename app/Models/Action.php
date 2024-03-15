@@ -13,6 +13,11 @@ class Action extends Model
     protected $primaryKey = 'id';
     protected $guarded = [];
 
+    public function getRecipientsAttribute($value): array
+    {
+        return json_decode($value);
+    }
+
     public function status()
     {
         return $this->belongsTo(ActionStatus::class, 'action_status_id', 'id');
@@ -22,4 +27,5 @@ class Action extends Model
     {
         return $this->belongsTo(ActionType::class, 'action_type_id', 'id');
     }
+
 }

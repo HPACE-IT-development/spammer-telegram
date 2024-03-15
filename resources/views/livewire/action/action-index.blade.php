@@ -19,12 +19,14 @@
         @else
             <div class="col-4 list-group ps-2">
                 @foreach($actions as $action)
-                    <x-action.action-index-item :action="$action"/>
+                    <x-action.action-index-item wire:click="toggleActiveAction" :action="$action" activeActionId="{{$activeAction->id}}"/>
                 @endforeach
             </div>
 
-            <div class="col-9">
-
+            <div class="col-8">
+                @if(!is_null($activeAction))
+                    <livewire:action.action-show :action="$activeAction" :key="$activeAction->id" />
+                @endif
             </div>
         @endif
     </div>
