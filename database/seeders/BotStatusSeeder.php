@@ -13,29 +13,28 @@ class BotStatusSeeder extends Seeder
     {
         DB::table('bot_statuses')->insert([
             [
-                'name' => 'Новый',
-                'description' => 'Новый'
+                'title' => 'new',
+                'importance' => 0,
+                'desc_ru' => 'Новый'
             ],
 
             [
-                'name' => 'Активный',
-                'description' => 'Активный'
+                'title' => 'active',
+                'importance' => 1,
+                'desc_ru' => 'Активный'
             ],
 
             [
-                'name' => 'Неактивный',
-                'description' => 'Неактивный'
+                'title' => 'in work',
+                'importance' => 2,
+                'desc_ru' => 'В работе'
             ],
 
             [
-                'name' => 'В работе',
-                'description' => 'В работе'
+                'title' => 'inactive',
+                'importance' => 3,
+                'desc_ru' => 'Неактивный'
             ],
-
-            [
-                'name' => 'Заблокирован',
-                'description' => 'Заблокирован'
-            ]
         ]);
     }
 }

@@ -10,8 +10,9 @@ return new class extends Migration
     {
         Schema::create('bot_statuses', function (Blueprint $table) {
             $table->unsignedTinyInteger('id')->autoIncrement();
-            $table->string('name', 32);
-            $table->string('description', 32);
+            $table->string('title', 32);
+            $table->unsignedTinyInteger('importance');
+            $table->string('desc_ru', 32);
         });
     }
 

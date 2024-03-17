@@ -17,10 +17,9 @@ class Bot extends Model
     public function getStatusBackgroundAttribute(): string
     {
         return match ($this->status_id) {
-            2 => 'success',
-            3 => 'danger',
-            4 => 'warning',
-            5 => 'dark',
+            2 => 'primary',
+            3 => 'warning',
+            4 => 'danger',
             default => 'light'
         };
     }

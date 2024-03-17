@@ -37,5 +37,4 @@
 
         <input type="submit" class="form-control btn btn-success bg-gradient fs-6" value="Войти">
     </form>
-
 </div>

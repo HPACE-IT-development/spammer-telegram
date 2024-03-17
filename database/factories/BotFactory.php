@@ -14,7 +14,7 @@ class BotFactory extends Factory
         return [
             'user_id' => 1,
             'phone' => $this->faker->e164PhoneNumber(),
-            'status_id' => $this->faker->randomElement([2, 3, 4, 5]),
+            'status_id' => $this->faker->randomElement([2, 3, 4]),
         ];
     }
 }
