@@ -1,4 +1,13 @@
 <div class="container px-5">
+    <div class="d-flex justify-content-between px-4 py-3">
+        <div>Здесь фильтры</div>
+        <button
+            class="btn btn-primary"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#botCreateModal"
+        >Добавить аккаунт</button>
+    </div>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -20,4 +29,6 @@
             @endforeach
         </tbody>
     </table>
+
+    <livewire:n.bot.create.bot-create />
 </div>

@@ -13,6 +13,8 @@ use Livewire\Component;
 #[Layout('components.layouts.n-app')]
 class BotIndex extends Component
 {
+//    public string $mode = 'index';
+
     public ?string $botStatusTitleFilter = null;
 
     #[Computed]
@@ -33,6 +35,11 @@ class BotIndex extends Component
 
         return $botBuilder->get();
     }
+
+//    public function changeMode($modeName): void
+//    {
+//        $this->mode = $modeName;
+//    }
 
     public function render()
     {
