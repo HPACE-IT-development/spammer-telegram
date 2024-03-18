@@ -27,14 +27,14 @@ class PhoneLogin extends Component
             try {
                 $madeline->phoneLogin($this->phone);
 
-                Bot::create([
+                $bot = Bot::create([
                     'user_id' => auth()->id(),
                     'status_id' => 1,
                     'phone' => $this->phone
                 ]);
 
                 $this->reset('phone');
-                // вызов запроса кода
+                $this->dispatch('bot-create-next');
             } catch (\Exception $e) {
                 $this->addError('phone', $e->getMessage());
                 $madeline->logout();

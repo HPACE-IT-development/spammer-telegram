@@ -28,7 +28,7 @@ use App\Enums\TelegramAuthStatusEnum;
                     {{$bot? 'disabled ': ''}}
                 >
                 @error('form.phone')
-                <span class="invalid-feedback">{{$message}}</span>
+                    <span class="invalid-feedback">{{$message}}</span>
                 @endif
 
                 @if($bot)

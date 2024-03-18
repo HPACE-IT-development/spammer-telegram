@@ -1,4 +1,4 @@
-<form wire:submit="save">
+<form wire:key="phone-login" wire:submit="save">
     <div class="w-75 modal-body py-1 mx-auto">
         <div>
             <input
