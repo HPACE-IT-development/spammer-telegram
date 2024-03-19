@@ -1,4 +1,9 @@
 <div class="container px-5">
+    @if(session()->has('success'))
+        <div class="alert alert-success">
+            {{session()->get('success')}}
+        </div>
+    @endif
     <div class="d-flex justify-content-between px-4 py-3">
         <div>Здесь фильтры</div>
         <button

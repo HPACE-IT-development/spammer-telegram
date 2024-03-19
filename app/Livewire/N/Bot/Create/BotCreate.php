@@ -13,7 +13,8 @@ class BotCreate extends Component
 
     public array $steps = [
         'n.bot.create.phone-login',
-        'n.bot.create.complete-phone-login'
+        'n.bot.create.complete-phone-login',
+        'n.bot.create.complete2-fa-login'
     ];
 
     #[Computed]
@@ -30,6 +31,20 @@ class BotCreate extends Component
     {
         $currentIndex = array_search($this->currentStep, $this->steps);
         $this->currentStep = $this->steps[$currentIndex + 1];
+    }
+
+    #[On('bot-create-success')]
+    public function success(): void
+    {
+        $this->bot->update(['status_id' => 2]);
+        $this->dispatch('refresh-bot-index',
+            status: 'success',
+            message: "Аккаунт {$this->bot->phone} успешно добавлен."
+        );
+
+        $this->reset('currentStep');
+        unset($this->bot);
+        $this->dispatch('hide-bot-create-modal');
     }
 
     public function render()

@@ -2,12 +2,11 @@
 
 namespace App\Livewire\N\Bot;
 
-use App\Models\Action;
 use App\Models\Bot;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('components.layouts.n-app')]
@@ -24,7 +23,10 @@ class BotIndex extends Component
         /* Если есть фильтрация => сортировка не нужна */
 
         $botBuilder = Bot::with(['status', 'group'])
-            ->where('user_id', auth()->id());
+            ->where('user_id', auth()->id())
+            ->whereHas('status', function ($query) {
+                $query->where('title', '!=', 'new');
+            });
 
 
         if(!isset($this->botStatusTitleFilter))
@@ -34,6 +36,14 @@ class BotIndex extends Component
         }
 
         return $botBuilder->get();
+    }
+
+    #[On('refresh-bot-index')]
+    public function refreshComponent($status = '', $message = '')
+    {
+        session()->flash($status, $message);
+        $this->reset();
+        unset($this->bots);
     }
 
 //    public function changeMode($modeName): void

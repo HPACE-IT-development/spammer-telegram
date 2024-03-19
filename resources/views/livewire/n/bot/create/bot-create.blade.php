@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="botCreateModal">
+<div wire:ignore.self class="modal fade" id="botCreateModal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header border-0">
@@ -10,3 +10,14 @@
         </div>
     </div>
 </div>
+
+@script
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        $wire.on('hide-bot-create-modal', () => {
+            let element = document.getElementById('closeBotCreateModal');
+            element.dispatchEvent(new Event('click', { 'bubbles': true }));
+        });
+    });
+</script>
+@endscript

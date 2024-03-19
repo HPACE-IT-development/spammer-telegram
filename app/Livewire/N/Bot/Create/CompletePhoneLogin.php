@@ -26,16 +26,14 @@ class CompletePhoneLogin extends Component
     public function save()
     {
         $this->validate();
-
         $madeline = new API(MadelineHelper::getMadelinePath($this->bot->phone));
 
         try {
             $response = $madeline->completePhoneLogin($this->code);
             switch ($response['_']) {
                 case 'auth.authorization':
-                    $this->reset('code', 'bot');
-                    $this->bot->update(['status_id' => 2]);
-                    // dispatch complete
+                    $this->reset();
+                    $this->dispatch('bot-create-success');
                     break;
                 case 'account.password':
                     $this->dispatch('bot-create-next');
@@ -51,7 +49,6 @@ class CompletePhoneLogin extends Component
                 default:
                     $this->addError('code', $message);
             }
-            return null;
         }
     }
 

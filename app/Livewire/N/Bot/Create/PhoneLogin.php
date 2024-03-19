@@ -19,6 +19,7 @@ class PhoneLogin extends Component
     public function save()
     {
         $this->validate();
+
         $madeline = new API(MadelineHelper::getMadelinePath($this->phone), MadelineHelper::getMadelineSettings());
         $authStatusEnum = TelegramAuthStatusEnum::from($madeline->getAuthorization());
 
@@ -33,7 +34,7 @@ class PhoneLogin extends Component
                     'phone' => $this->phone
                 ]);
 
-                $this->reset('phone');
+                $this->reset();
                 $this->dispatch('bot-create-next');
             } catch (\Exception $e) {
                 $this->addError('phone', $e->getMessage());
