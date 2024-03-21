@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('bot_groups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
-            $table->string('name', 32);
-            $table->string('description');
+            $table->string('title', 32);
+            $table->string('desc_ru');
 
             $table->foreign('user_id')->references('id')->on('users');
         });
