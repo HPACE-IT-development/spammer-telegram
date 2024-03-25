@@ -1,73 +1,83 @@
-<div class="container px-5">
+<div>
     @if(session()->has('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success alert-dismissible fade show">
             {{session()->get('success')}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
-    <div class="d-flex justify-content-between px-4 py-3">
-        <div>
-            <select wire:model.change="botStatusTitleFilter" class="form-select" name="">
-                @foreach($filtrationStatuses as $key => $status)
-                    <option
-                        value="{{$status['title']}}"
-                        {{($botStatusTitleFilter === $status['title'])? 'selected': ''}}
-                    >{{$status['desc_ru']}}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            @if($mode === 'simple')
-                <button
-                    class="btn btn-primary"
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#botCreateModal"
-                >Добавить аккаунт</button>
+    @if($mode === 'simple' OR $mode === 'removal')
+        <div class="d-flex justify-content-between px-4 py-3">
+            <div>
+                <select wire:model.change="botStatusTitleFilter" class="form-select form-select-sm" name="">
+                    @foreach($filtrationStatuses as $key => $status)
+                        <option
+                            wire:key="{{$status['id']}}"
+                            value="{{$status['title']}}"
+                            {{($botStatusTitleFilter === $status['title'])? 'selected': ''}}
+                        >{{$status['desc_ru']}}</option>
+                    @endforeach
+                </select>
+            </div>
 
-                <button
-                    wire:click="changeMode('removal')"
-                    class="btn btn-danger"
-                    type="button"
-                >Удалить</button>
+            @if($mode === 'simple')
+                <div>
+                    <button
+                        class="btn btn-primary btn-sm"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#botCreateModal"
+                    >Добавить аккаунт
+                    </button>
+
+                    <button
+                        wire:click="set('mode', 'removal')"
+                        class="btn btn-danger btn-sm"
+                        type="button"
+                    >Удалить
+                    </button>
+                </div>
             @elseif($mode === 'removal')
-                <button wire:click="acceptRemoval" class="btn btn-primary">Сохранить</button>
-                <button wire:click="cancelRemoval" class="btn btn-danger">Отменить</button>
+                <div>
+                    <button wire:click="acceptRemoval" class="btn btn-primary btn-sm">Сохранить</button>
+                    <button wire:click="cancelRemoval" class="btn btn-danger btn-sm">Отменить</button>
+                </div>
             @endif
         </div>
-    </div>
+    @endif
+
     <table class="table table-hover">
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Имя</th>
-                <th>Номер</th>
-                <th>Статус</th>
-                <th>Действия</th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th>Номер</th>
+            <th>Статус</th>
+        </tr>
         </thead>
 
         <tbody>
-            @foreach($bots as $key => $bot)
-                @switch($mode)
-                    @case('simple')
-                        <x-n.bot.bot-index-simple-item :bot="$bot" :key="$key" />
-                        @break
-                    @case('removal')
-                        <x-n.bot.bot-index-checkbox-item :bot="$bot" :selectedBots="$selectedBots"/>
-                        @break
-                @endswitch
-            @endforeach
+        @foreach($bots as $key => $bot)
+            @switch($mode)
+                @case('simple')
+                    <x-n.bot.bot-index-simple-item :bot="$bot" :key="$key"/>
+                    @break
+                @case('removal')
+                @case('performers')
+                    <x-n.bot.bot-index-checkbox-item :bot="$bot" :selectedBots="$selectedBots"/>
+                    @break
+            @endswitch
+        @endforeach
         </tbody>
     </table>
 
-    <livewire:n.bot.create.bot-create />
+    @if($mode === 'simple')
+        <livewire:n.bot.create.bot-create/>
+    @endif
 </div>
-
 
 @script
 <script>
-    Livewire.hook('morph.added',  ({ el }) => {
-        if(el.classList.contains('cell-checkbox')) {
+    Livewire.hook('element.init', ({ component, el }) => {
+        if (el.classList.contains('cell-checkbox')) {
             let botId = el.id.match(/^bot(?<bot_id>[0-9]+)-.*/).groups.bot_id;
             el.addEventListener('click', () => {
                 $wire.toggleSelectedBot(botId);

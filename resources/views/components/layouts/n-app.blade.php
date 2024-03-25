@@ -14,11 +14,11 @@
             <span class="navbar-brand h1 fs-2 m-0">HPACE</span>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a wire:navigate href="{{action(\App\Livewire\N\Bot\BotIndex::class)}}" class="nav-link">Боты</a>
+                    <a wire:navigate href="{{action(\App\Livewire\N\Bots::class)}}" class="nav-link">Боты</a>
                 </li>
 
                 <li class="nav-item">
-                    <a wire:navigate href="{{action(\App\Livewire\Newsletter::class)}}" class="nav-link">Задачи</a>
+                    <a wire:navigate href="{{action(\App\Livewire\N\Action\ActionIndex::class)}}" class="nav-link">Задачи</a>
                 </li>
             </ul>
         </div>

@@ -16,7 +16,7 @@ class ActionTypeSeeder extends Seeder
         DB::table('action_types')->insert([
             [
                 'title' => 'newsletter',
-                'description' => 'Рассылка'
+                'desc_ru' => 'Рассылка'
             ]
         ]);
     }

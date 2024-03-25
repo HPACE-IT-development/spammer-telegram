@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('action_types', function (Blueprint $table) {
             $table->unsignedTinyInteger('id')->autoIncrement();
             $table->string('title', 32);
-            $table->string('description', 32);
+            $table->string('desc_ru', 32);
         });
     }
 

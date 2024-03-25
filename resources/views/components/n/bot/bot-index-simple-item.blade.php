@@ -1,7 +1,8 @@
-<tr wire:key="simple-{{$key}}" class="table-{{$bot->status_background}}">
-    <td>{{$key}}</td>
-    <td>{{isset($bot->name)? $bot->name: 'Не указано'}}</td>
+<tr wire:key="simple-{{$key + 1}}" class="table-{{$bot->status_background}}">
+    <td>{{$key + 1}}</td>
     <td>{{$bot->phone}}</td>
     <td>{{$bot->status->desc_ru}}</td>
-    <td></td>
+    <td>
+        <button wire:click="destroyBot({{$bot->id}})" class="btn btn-outline-{{$bot->status_background}} btn-sm">Удалить</button>
+    </td>
 </tr>

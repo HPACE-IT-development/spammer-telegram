@@ -13,6 +13,17 @@ class Action extends Model
     protected $primaryKey = 'id';
     protected $guarded = [];
 
+    public function getStatusBackgroundAttribute()
+    {
+        return match ($this->action_status_id) {
+            1 => 'primary',
+            2 => 'warning',
+            3 => 'success',
+            4 => 'danger',
+            default => 'light'
+        };
+    }
+
     public function getRecipientsAttribute($value): array
     {
         return json_decode($value);

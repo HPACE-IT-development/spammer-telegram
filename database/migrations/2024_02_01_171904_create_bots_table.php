@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('bots', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('name', 32)->nullable();
             $table->unsignedBigInteger('group_id')->nullable();
             $table->unsignedTinyInteger('status_id');
             $table->string('phone')->unique();

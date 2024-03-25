@@ -5,20 +5,23 @@ namespace App\Livewire\N\Bot;
 use App\Models\Bot;
 use App\Models\BotStatus;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-#[Layout('components.layouts.n-app')]
 class BotIndex extends Component
 {
-    public string $mode = 'simple';
+    public string $mode;
+    public string $botStatusTitleFilter;
 
     public array $selectedBots = [];
 
-    public string $botStatusTitleFilter = 'any';
+    public function mount($mode): void
+    {
+        $this->mode = $mode;
+        $this->botStatusTitleFilter = ($mode === 'performers')? 'active': 'any';
+
+    }
 
     #[Computed]
     public function bots(): Collection
@@ -53,7 +56,7 @@ class BotIndex extends Component
     public function filtrationStatuses()
     {
         $statuses = BotStatus::where('importance', '>', 0)->get()->toArray();
-        $statuses[] = ['title' => 'any', 'desc_ru' => 'Любой статус'];
+        $statuses[] = ['title' => 'any', 'desc_ru' => 'Любой статус', 'id' => 0];
         return $statuses;
     }
 
@@ -65,11 +68,6 @@ class BotIndex extends Component
         unset($this->bots);
     }
 
-    public function changeMode($title): void
-    {
-        $this->mode = $title;
-    }
-
     public function toggleSelectedBot($id): void
     {
         $arrayKey = array_search((int) $id, $this->selectedBots);
@@ -78,15 +76,28 @@ class BotIndex extends Component
         else $this->selectedBots[] = (int) $id;
     }
 
-    public function cancelRemoval(): void
-    {
-        $this->reset('selectedBots', 'mode');
-    }
-
     public function acceptRemoval(): void
     {
         Bot::destroy($this->selectedBots);
+        session()->flash('success', 'Выбранные боты успешно удалены.');
         $this->cancelRemoval();
+    }
+
+    public function cancelRemoval(): void
+    {
+        $this->cancelSelected();
+        $this->mode = 'simple';
+    }
+
+    public function cancelSelected():void
+    {
+        $this->reset('selectedBots');
+    }
+
+    public function destroyBot($id): void
+    {
+        session()->flash('success', 'Бот успешно удален.');
+        Bot::destroy((int)$id);
     }
 
     public function render()
