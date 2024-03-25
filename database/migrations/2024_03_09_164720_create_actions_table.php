@@ -16,7 +16,6 @@ return new class extends Migration
             $table->json('recipients');
             $table->string('text', 4096);
             $table->unsignedBigInteger('user_id');
-            $table->nullableMorphs('actionable');
             $table->unsignedTinyInteger('action_type_id');
             $table->unsignedTinyInteger('action_status_id')->default(1);
             $table->timestamps();

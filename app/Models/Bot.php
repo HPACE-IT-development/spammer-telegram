@@ -28,9 +28,4 @@ class Bot extends Model
     {
         return $this->belongsTo(BotStatus::class, 'status_id', 'id');
     }
-
-    public function group()
-    {
-        return $this->belongsTo(BotGroup::class, 'group_id', 'id');
-    }
 }
