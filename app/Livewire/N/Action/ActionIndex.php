@@ -6,6 +6,7 @@ use App\Models\Action;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('components.layouts.n-app')]
@@ -32,6 +33,12 @@ class ActionIndex extends Component
     public function toggleActiveAction($collectionKey): void
     {
         $this->activeAction = $this->actions->get($collectionKey);
+    }
+
+    #[On('refresh-action-index')]
+    public function refreshComponent($status, $message): void
+    {
+        session()->flash($status, $message);
     }
 
     public function render()

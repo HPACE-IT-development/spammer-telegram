@@ -7,7 +7,7 @@ use App\Rules\RecipientsList;
 use Illuminate\Support\Facades\Log;
 use Livewire\Form;
 
-class ActionCreateForm extends Form
+class ActionCreateNewsletterForm extends Form
 {
     public string $recipients = '';
 
@@ -43,5 +43,9 @@ class ActionCreateForm extends Form
             'user_id' => auth()->id(),
             'action_type_id' => 1
         ]);
+
+        /* здесь можно не обнулять поля формы, тк в ActionCreate меняется тип
+            создаваемого действия => форма убирается и при выборе этого же типа формы
+            она рисуется с начальными значениями.                                   */
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Action;
 
-use App\Livewire\Forms\ActionCreateForm;
+use App\Livewire\Forms\ActionCreateNewsletterForm;
 use App\Livewire\Newsletter;
 use Livewire\Component;
 
 class ActionCreate extends Component
 {
-    public ActionCreateForm $form;
+    public ActionCreateNewsletterForm $form;
 
     public function save()
     {

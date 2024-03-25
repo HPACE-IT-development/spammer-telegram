@@ -1,4 +1,10 @@
 <div class="container p-5">
+    @if(session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{session()->get('success')}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
     <div class="row">
         <div class="col-8">
             Фильтры
