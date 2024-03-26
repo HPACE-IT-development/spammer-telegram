@@ -71,6 +71,19 @@
 
     @if($mode === 'simple')
         <livewire:n.bot.create.bot-create/>
+    @elseif($mode === 'performers')
+        <div>
+            <button
+                {{($isDiffActionPerformersAndSelectedBots)? '': 'disabled'}}
+                wire:click="saveSelectedBots"
+                type="button"
+                class="btn btn-primary btn-sm">Сохранить</button>
+            <button
+                {{($isDiffActionPerformersAndSelectedBots)? '': 'disabled'}}
+                wire:click="cancelSelected"
+                type="button"
+                class="btn btn-danger btn-sm">Отменить</button>
+        </div>
     @endif
 </div>
 

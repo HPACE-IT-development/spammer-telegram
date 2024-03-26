@@ -39,4 +39,9 @@ class Action extends Model
         return $this->belongsTo(ActionType::class, 'action_type_id', 'id');
     }
 
+    public function performers()
+    {
+        return $this->belongsToMany(Bot::class, 'performers', 'action_id', 'bot_id');
+    }
+
 }

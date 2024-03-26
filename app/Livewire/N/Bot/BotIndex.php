@@ -2,9 +2,13 @@
 
 namespace App\Livewire\N\Bot;
 
+use App\Models\Action;
 use App\Models\Bot;
 use App\Models\BotStatus;
+use App\Models\Performer;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -14,12 +18,46 @@ class BotIndex extends Component
     public string $mode;
     public string $botStatusTitleFilter;
 
+
+    /* id выбранных ботов в int */
     public array $selectedBots = [];
 
-    public function mount($mode): void
+    public array $actionPerformers = [];
+
+    public ?Action $action;
+
+    public function mount($mode, $action): void
     {
         $this->mode = $mode;
-        $this->botStatusTitleFilter = ($mode === 'performers')? 'active': 'any';
+
+        if($mode === 'performers')
+        {
+            $this->botStatusTitleFilter = 'active';
+            $this->action = $action;
+
+
+            $actionPerformers = Performer::select('bot_id')
+                ->where('action_id', $action->id)
+                ->whereHas('bot', function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('title', 'active');
+                    });
+                })
+                ->get()
+                ->toArray();
+
+
+            foreach ($actionPerformers as $performer)
+            {
+                $this->actionPerformers[] = $performer['bot_id'];
+            }
+
+            $this->selectedBots = $this->actionPerformers;
+        }
+        else
+        {
+            $this->botStatusTitleFilter = 'any';
+        }
 
     }
 
@@ -60,6 +98,17 @@ class BotIndex extends Component
         return $statuses;
     }
 
+    #[Computed]
+    public function isDiffActionPerformersAndSelectedBots(): bool
+    {
+        $diff1 = array_diff($this->selectedBots, $this->actionPerformers);
+        $diff2 = array_diff($this->actionPerformers, $this->selectedBots);
+
+        $is = false;
+        if($diff1 OR $diff2) $is = true;
+        return $is;
+    }
+
     #[On('refresh-bot-index')]
     public function refreshComponent($status = '', $message = ''): void
     {
@@ -74,6 +123,8 @@ class BotIndex extends Component
 
         if($arrayKey OR $arrayKey === 0) unset($this->selectedBots[$arrayKey]);
         else $this->selectedBots[] = (int) $id;
+
+        if($this->mode === 'performers') unset($this->isDiffActionPerformersAndSelectedBots);
     }
 
     public function acceptRemoval(): void
@@ -87,6 +138,25 @@ class BotIndex extends Component
     {
         $this->cancelSelected();
         $this->mode = 'simple';
+    }
+
+    public function saveSelectedBots(): void
+    {
+        if($this->mode === 'performers')
+        {
+            $rowsArray = [];
+            foreach ($this->selectedBots as $bot_id)
+            {
+                $rowsArray[] = [
+                    'bot_id' => $bot_id,
+                    'action_id' => $this->action->id
+                ];
+            }
+
+            DB::table('performers')->whereIn('bot_id', $this->actionPerformers)->delete();
+            DB::table('performers')->insert($rowsArray);
+            $this->actionPerformers = $this->selectedBots;
+        }
     }
 
     public function cancelSelected():void
@@ -104,7 +174,8 @@ class BotIndex extends Component
     {
         return view('livewire.n.bot.bot-index', [
             'bots' => $this->bots,
-            'filtrationStatuses' => $this->filtrationStatuses
+            'filtrationStatuses' => $this->filtrationStatuses,
+            'isDiffActionPerformersAndSelectedBots' => $this->isDiffActionPerformersAndSelectedBots
         ]);
     }
 }
