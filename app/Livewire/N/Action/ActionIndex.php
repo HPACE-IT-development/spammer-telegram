@@ -16,7 +16,8 @@ class ActionIndex extends Component
 
     public string $displayedStatus = 'created';
 
-    public function mount(): void
+
+    public function boot(): void
     {
         $this->activeAction = ($this->actions->isNotEmpty())? $this->actions->first(): null;
     }
@@ -27,7 +28,7 @@ class ActionIndex extends Component
         $builder = Action::with('status', 'type')
             ->where('user_id', auth()->id());
 
-        return $builder->get();
+        return $builder->orderBy('created_at', 'desc')->get();
     }
 
     public function toggleActiveAction($collectionKey): void

@@ -30,7 +30,7 @@ class BotIndex extends Component
         /* Если есть фильтрация => сортировка не нужна */
         $status = $this->botStatusTitleFilter;
 
-        $botBuilder = Bot::with(['status', 'group'])
+        $botBuilder = Bot::with(['status'])
             ->where('user_id', auth()->id());
 
 

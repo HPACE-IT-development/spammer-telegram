@@ -37,15 +37,14 @@ class ActionCreateNewsletterForm extends Form
             return  trim($elem);
         }, explode(',', $attributes['recipients'])));
 
-        return Action::create([
+        $action = Action::create([
             'recipients' => $recipientsJSON,
             'text' => $attributes['text'],
             'user_id' => auth()->id(),
             'action_type_id' => 1
         ]);
 
-        /* здесь можно не обнулять поля формы, тк в ActionCreate меняется тип
-            создаваемого действия => форма убирается и при выборе этого же типа формы
-            она рисуется с начальными значениями.                                   */
+        $this->reset();
+        return $action;
     }
 }

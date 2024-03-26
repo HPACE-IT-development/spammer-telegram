@@ -10,6 +10,6 @@
     {{($action->id === $activeActionId)? 'disabled': ''}}
 >
     <span>
-        {{$action->type->description}}: {{$action->created_at}}
+        {{$action->type->desc_ru}}: {{$action->created_at}}
     </span>
 </button>
