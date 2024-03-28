@@ -161,7 +161,13 @@ class BotIndex extends Component
 
     public function cancelSelected():void
     {
-        $this->reset('selectedBots');
+        switch ($this->mode){
+            case 'performers':
+                $this->dispatch('action-show-toggle', 'performers');
+                break;
+            default:
+                $this->reset('selectedBots');
+        }
     }
 
     public function destroyBot($id): void
