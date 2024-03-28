@@ -12,15 +12,7 @@ use Livewire\Component;
 #[Layout('components.layouts.n-app')]
 class ActionIndex extends Component
 {
-    public ?Action $activeAction;
-
     public string $displayedStatus = 'created';
-
-
-    public function boot(): void
-    {
-        $this->activeAction = ($this->actions->isNotEmpty())? $this->actions->first(): null;
-    }
 
     #[Computed]
     public function actions()
@@ -31,21 +23,29 @@ class ActionIndex extends Component
         return $builder->orderBy('created_at', 'desc')->get();
     }
 
+    #[Computed]
+    public function activeAction(): ?Action
+    {
+        return ($this->actions->isNotEmpty())? $this->actions->first(): null;
+    }
+
     public function toggleActiveAction($collectionKey): void
     {
         $this->activeAction = $this->actions->get($collectionKey);
     }
 
-    #[On('refresh-action-index')]
+    #[On('action-index-refresh')]
     public function refreshComponent($status, $message): void
     {
         session()->flash($status, $message);
     }
 
+
     public function render()
     {
         return view('livewire.n.action.action-index', [
-            'actions' => $this->actions
+            'actions' => $this->actions,
+            'activeAction' => $this->activeAction
         ]);
     }
 }

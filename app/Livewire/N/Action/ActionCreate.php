@@ -26,7 +26,7 @@ class ActionCreate extends Component
         if($this->selectedType === 'newsletter')
         {
             if($this->newsletterForm->store()) {
-                $this->dispatch('refresh-action-index',
+                $this->dispatch('action-index-refresh',
                     status: 'success',
                     message: "Успешное добавление новой задачи."
                 );

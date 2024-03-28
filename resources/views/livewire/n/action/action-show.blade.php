@@ -50,4 +50,11 @@
             </div>
         @endif
     </div>
+
+    <div>
+        @if($action->status->title === 'created')
+            <button wire:click="performJob" type="button" class="btn btn-primary btn-sm">Выполнить задачу</button>
+        @endif
+        <button wire:click="deleteAction" type="button" class="btn btn-danger btn-sm">Удалить задачу</button>
+    </div>
 </div>
