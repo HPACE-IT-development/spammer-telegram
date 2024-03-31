@@ -29,34 +29,18 @@ class BotIndex extends Component
     public function mount($mode, $action): void
     {
         $this->mode = $mode;
+        $this->botStatusTitleFilter = 'any';
 
         if($mode === 'performers')
         {
-            $this->botStatusTitleFilter = 'active';
             $this->action = $action;
 
-
-            $actionPerformers = Performer::select('bot_id')
-                ->where('action_id', $action->id)
-                ->whereHas('bot', function ($query) {
-                    $query->whereHas('status', function ($query) {
-                        $query->where('title', 'active');
-                    });
-                })
-                ->get()
-                ->toArray();
-
-
-            foreach ($actionPerformers as $performer)
+            foreach ($action->performers as $performer)
             {
-                $this->actionPerformers[] = $performer['bot_id'];
+                $this->actionPerformers[] = $performer->id;
             }
 
             $this->selectedBots = $this->actionPerformers;
-        }
-        else
-        {
-            $this->botStatusTitleFilter = 'any';
         }
 
     }

@@ -17,7 +17,7 @@ class ActionIndex extends Component
     #[Computed]
     public function actions()
     {
-        $builder = Action::with('status', 'type')
+        $builder = Action::with('status', 'type', 'performers')
             ->where('user_id', auth()->id());
 
         return $builder->orderBy('created_at', 'desc')->get();
