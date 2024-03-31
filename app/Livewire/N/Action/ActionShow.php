@@ -2,7 +2,9 @@
 
 namespace App\Livewire\N\Action;
 
+use App\Jobs\ProcessNewsletter;
 use App\Models\Action;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
@@ -20,9 +22,9 @@ class ActionShow extends Component
         else $this->visibleElement = $field;
     }
 
-    public function performJob()
+    public function performJob(): void
     {
-        // добавление задачи в очередь
+        ProcessNewsletter::dispatch($this->action);
     }
 
     public function deleteAction(): void
