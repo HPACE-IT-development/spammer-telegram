@@ -137,9 +137,18 @@ class BotIndex extends Component
                 ];
             }
 
-            DB::table('performers')->whereIn('bot_id', $this->actionPerformers)->delete();
+            DB::table('performers')
+                ->where('action_id', $this->action->id)
+                ->whereIn('bot_id', $this->actionPerformers)->delete();
             DB::table('performers')->insert($rowsArray);
             $this->actionPerformers = $this->selectedBots;
+
+            $this->dispatch('action-index-refresh',
+                status: 'success',
+                message: "{$this->action->type->desc_ru} # {$this->action->id}: Успешное добавление исполнителей."
+            );
+
+            $this->dispatch('action-show-toggle', 'performers');
         }
     }
 
