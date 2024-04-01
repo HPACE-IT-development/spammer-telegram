@@ -2,12 +2,12 @@
 
 namespace App\Livewire\N\Action;
 
+use App\Helpers\MadelineHelper;
 use App\Jobs\ProcessNewsletter;
 use App\Models\Action;
-use Carbon\Carbon;
+use danog\MadelineProto\API;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 class ActionShow extends Component

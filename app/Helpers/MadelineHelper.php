@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use danog\MadelineProto\Settings;
 use danog\MadelineProto\Settings\AppInfo;
-use danog\MadelineProto\Stream\Proxy\HttpProxy;
+use Illuminate\Support\Facades\Storage;
 
 class MadelineHelper
 {
@@ -21,6 +21,11 @@ class MadelineHelper
     public static function getMadelinePath(string $phone): string
     {
         return 'storage/sessions/' . str_replace('+', '', $phone) . '.madeline';
+    }
+
+    public static function getMadelineFullPath(string $phone): string
+    {
+        return Storage::path('sessions').'/'.str_replace('+', '', $phone) . '.madeline';
     }
 
 //    public static function getMadelineStoragePath(string $phone): string
