@@ -3,10 +3,11 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+#[Layout('components.layouts.n-app')]
 class Login extends Component
 {
     #[Validate('required', message: 'Обзятаельное поле!')]
@@ -24,7 +25,7 @@ class Login extends Component
             return;
         }
 
-        return $this->redirect('/my-bots');
+        return $this->redirect('/bots');
     }
 
     public function render()
