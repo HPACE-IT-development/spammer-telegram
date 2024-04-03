@@ -22,7 +22,12 @@
     </div>
 
     <div class="modal-footer border-0">
-        <button id="closeBotCreateModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button
+            wire:click="$dispatchTo('n.bot.create.bot-create', 'bot-create-cancel')"
+            id="closeBotCreateModal"
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">Отменить</button>
         <button type="submit" class="btn btn-primary">Отправить код</button>
     </div>
 </form>

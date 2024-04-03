@@ -4,7 +4,13 @@
             {{session()->get('success')}}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
+    @elseif(session()->has('danger'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{session()->get('danger')}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
     @endif
+
     @if($mode === 'simple' OR $mode === 'removal')
         <div class="d-flex justify-content-between px-4 py-3">
             <div>

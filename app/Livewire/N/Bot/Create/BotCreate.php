@@ -2,7 +2,10 @@
 
 namespace App\Livewire\N\Bot\Create;
 
+use App\Enums\TelegramAuthStatusEnum;
+use App\Helpers\MadelineHelper;
 use App\Models\Bot;
+use danog\MadelineProto\API;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -16,6 +19,17 @@ class BotCreate extends Component
         'n.bot.create.complete-phone-login',
         'n.bot.create.complete2-fa-login'
     ];
+
+    public function mount(): void
+    {
+        if($this->bot) {
+            $madelineSession = new API(MadelineHelper::getMadelinePath($this->bot->phone));
+            $authStatusEnum = TelegramAuthStatusEnum::from($madelineSession->getAuthorization());
+
+            if($authStatusEnum === TelegramAuthStatusEnum::WAITING_CODE) $this->currentStep = 'n.bot.create.complete-phone-login';
+            elseif($authStatusEnum === TelegramAuthStatusEnum::WAITING_PASSWORD) $this->currentStep = 'n.bot.create.complete2-fa-login';
+        }
+    }
 
     #[Computed]
     public function bot()
@@ -45,6 +59,15 @@ class BotCreate extends Component
         $this->reset('currentStep');
         unset($this->bot);
         $this->dispatch('hide-bot-create-modal');
+    }
+
+    #[On('bot-create-cancel')]
+    public function cancel(): void
+    {
+        (new API(MadelineHelper::getMadelinePath($this->bot->phone)))->logout();
+        $this->bot->delete();
+        $this->reset();
+        unset($this->bot);
     }
 
     public function render()

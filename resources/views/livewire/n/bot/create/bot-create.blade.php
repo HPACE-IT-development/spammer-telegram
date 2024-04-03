@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h1 class="modal-title fs-5">Добавить аккаунт Telegram</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <livewire:dynamic-component :is="$currentStep" :bot="$bot" :key="$currentStep"/>

@@ -2,10 +2,12 @@
 
 namespace App\Livewire\N\Bot;
 
+use App\Helpers\MadelineHelper;
 use App\Models\Action;
 use App\Models\Bot;
 use App\Models\BotStatus;
 use App\Models\Performer;
+use danog\MadelineProto\API;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +18,7 @@ use Livewire\Component;
 class BotIndex extends Component
 {
     public string $mode;
-    public string $botStatusTitleFilter;
+    public string $botStatusTitleFilter = 'any';
 
 
     /* id выбранных ботов в int */
@@ -29,7 +31,6 @@ class BotIndex extends Component
     public function mount($mode, $action): void
     {
         $this->mode = $mode;
-        $this->botStatusTitleFilter = 'any';
 
         if($mode === 'performers')
         {
@@ -165,8 +166,16 @@ class BotIndex extends Component
 
     public function destroyBot($id): void
     {
-        session()->flash('success', 'Бот успешно удален.');
-        Bot::destroy((int)$id);
+        $bot = Bot::where('id', (int) $id)->first();
+        $madelineSession = new API(MadelineHelper::getMadelinePath($bot->phone));
+
+        try {
+            $madelineSession->logout();
+            $bot->delete();
+            session()->flash('success', 'Бот успешно удален.');
+        } catch (\Exception $e) {
+            session()->flash('danger', 'Произошла неизвестная ошибка.');
+        }
     }
 
     public function render()
