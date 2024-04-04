@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Js;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -94,11 +95,11 @@ class BotIndex extends Component
         return $is;
     }
 
-    #[On('refresh-bot-index')]
-    public function refreshComponent($status = '', $message = ''): void
+    #[On('bot-index-refresh-to')]
+    public function refreshTo($mode, $status = '', $message = ''): void
     {
+        $this->mode = $mode;
         session()->flash($status, $message);
-        $this->reset();
         unset($this->bots);
     }
 
@@ -114,8 +115,20 @@ class BotIndex extends Component
 
     public function acceptRemoval(): void
     {
-        Bot::destroy($this->selectedBots);
-        session()->flash('success', 'Выбранные боты успешно удалены.');
+        try {
+            $deletedBots = Bot::where('user_id', auth()->user()->id)
+                ->whereIn('id', $this->selectedBots)
+                ->get();
+
+            foreach ($deletedBots as $bot) {
+                $madelineSession = new API(MadelineHelper::getMadelinePath($bot->phone));
+                $madelineSession->logout();
+                $bot->delete();
+            }
+            session()->flash('success', 'Выбранные боты успешно удалены.');
+        } catch (\Exception $e) {
+            session()->flash('danger', 'Произошла неизвестная ошибка.');
+        }
         $this->cancelRemoval();
     }
 
@@ -177,6 +190,7 @@ class BotIndex extends Component
             session()->flash('danger', 'Произошла неизвестная ошибка.');
         }
     }
+
 
     public function render()
     {

@@ -23,8 +23,7 @@
 
     <div class="modal-footer border-0">
         <button
-            wire:click="$dispatchTo('n.bot.create.bot-create', 'bot-create-cancel')"
-            id="closeBotCreateModal"
+            wire:click="dispatchTo('n.bot.create.bot-create', 'bot-create-cancel')"
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal">Отменить</button>

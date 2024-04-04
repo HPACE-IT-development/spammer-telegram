@@ -33,6 +33,7 @@ class Complete2FaLogin extends Component
                 case 'auth.authorization':
                     $this->reset('password');
                     $this->dispatch('bot-create-success');
+                    break;
                 default:
                     $this->addError('password', 'Ошибки нет,но что-то пошло не так.');
             }

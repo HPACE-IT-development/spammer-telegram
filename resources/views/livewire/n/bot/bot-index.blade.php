@@ -1,17 +1,16 @@
-<div>
-    @if(session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show">
-            {{session()->get('success')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @elseif(session()->has('danger'))
-        <div class="alert alert-danger alert-dismissible fade show">
-            {{session()->get('danger')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
+<div wire:key='{{($mode === 'performers')? "$mode-{$action->id}": "single"}}'>
     @if($mode === 'simple' OR $mode === 'removal')
+        @if(session()->has('success'))
+            <div class="alert alert-success alert-dismissible fade show">
+                {{session()->get('success')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @elseif(session()->has('danger'))
+            <div class="alert alert-danger alert-dismissible fade show">
+                {{session()->get('danger')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
         <div class="d-flex justify-content-between px-4 py-3">
             <div>
                 <select wire:model.change="botStatusTitleFilter" class="form-select form-select-sm" name="">
@@ -36,7 +35,7 @@
                     </button>
 
                     <button
-                        wire:click="set('mode', 'removal')"
+                        wire:click="$set('mode', 'removal')"
                         class="btn btn-danger btn-sm"
                         type="button"
                     >Удалить
@@ -75,9 +74,11 @@
         </tbody>
     </table>
 
-    @if($mode === 'simple')
-        <livewire:n.bot.create.bot-create/>
-    @elseif($mode === 'performers')
+    <div>
+        @if($mode === 'simple')
+            <livewire:n.bot.create.bot-create />
+        @elseif($mode === 'performers')
+    </div>
         <div>
             <button
                 {{($isDiffActionPerformersAndSelectedBots)? '': 'disabled'}}
@@ -92,16 +93,3 @@
         </div>
     @endif
 </div>
-
-@script
-<script>
-    Livewire.hook('element.init', ({ component, el }) => {
-        if (el.classList.contains('cell-checkbox')) {
-            let botId = el.id.match(/^bot(?<bot_id>[0-9]+)-.*/).groups.bot_id;
-            el.addEventListener('click', () => {
-                $wire.toggleSelectedBot(botId);
-            })
-        }
-    });
-</script>
-@endscript

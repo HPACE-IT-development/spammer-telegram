@@ -16,6 +16,8 @@ class PhoneLogin extends Component
     #[Validate('unique:bots')]
     public string $phone = '';
 
+    public ?Bot $bot;
+
     public function save()
     {
         $this->validate();

@@ -4,8 +4,10 @@ namespace App\Livewire\N\Bot\Create;
 
 use App\Enums\TelegramAuthStatusEnum;
 use App\Helpers\MadelineHelper;
+use App\Livewire\N\Bot\BotIndex;
 use App\Models\Bot;
 use danog\MadelineProto\API;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -22,12 +24,12 @@ class BotCreate extends Component
 
     public function mount(): void
     {
-        if($this->bot) {
+        if ($this->bot) {
             $madelineSession = new API(MadelineHelper::getMadelinePath($this->bot->phone));
             $authStatusEnum = TelegramAuthStatusEnum::from($madelineSession->getAuthorization());
 
-            if($authStatusEnum === TelegramAuthStatusEnum::WAITING_CODE) $this->currentStep = 'n.bot.create.complete-phone-login';
-            elseif($authStatusEnum === TelegramAuthStatusEnum::WAITING_PASSWORD) $this->currentStep = 'n.bot.create.complete2-fa-login';
+            if ($authStatusEnum === TelegramAuthStatusEnum::WAITING_CODE) $this->currentStep = 'n.bot.create.complete-phone-login';
+            elseif ($authStatusEnum === TelegramAuthStatusEnum::WAITING_PASSWORD) $this->currentStep = 'n.bot.create.complete2-fa-login';
         }
     }
 
@@ -50,15 +52,18 @@ class BotCreate extends Component
     #[On('bot-create-success')]
     public function success(): void
     {
+        $this->dispatch('hide-bot-create-modal')
+            ->self();
+
         $this->bot->update(['status_id' => 2]);
-        $this->dispatch('refresh-bot-index',
+        $this->dispatch('bot-index-refresh-to',
+            mode: 'simple',
             status: 'success',
             message: "Аккаунт {$this->bot->phone} успешно добавлен."
-        );
+        )
+            ->to(BotIndex::class);
 
-        $this->reset('currentStep');
-        unset($this->bot);
-        $this->dispatch('hide-bot-create-modal');
+        $this->reset();
     }
 
     #[On('bot-create-cancel')]
@@ -66,8 +71,8 @@ class BotCreate extends Component
     {
         (new API(MadelineHelper::getMadelinePath($this->bot->phone)))->logout();
         $this->bot->delete();
-        $this->reset();
         unset($this->bot);
+        $this->reset();
     }
 
     public function render()
