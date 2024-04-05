@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h1 class="modal-title fs-5">Добавить задачу</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                <button wire:click="cancel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
 
             <form wire:submit="save">
