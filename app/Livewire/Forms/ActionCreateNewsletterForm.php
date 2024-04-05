@@ -44,10 +44,6 @@ class ActionCreateNewsletterForm extends Form
     {
         $attributes = $this->validate();
 
-        if(isset($attributes['image'])) {
-            $attributes['image'] = $attributes['image']->store('action/newsletter');
-        }
-
         $recipientsJSON = json_encode(array_map(function ($elem) {
             return  trim($elem);
         }, explode(',', $attributes['recipients'])));
@@ -59,10 +55,14 @@ class ActionCreateNewsletterForm extends Form
             'action_type_id' => 1
         ]);
 
-        Image::create([
-            'action_id' => $action->id,
-            'path' => $attributes['image']
-        ]);
+
+        if(isset($attributes['image'])) {
+            $path = $attributes['image']->store('action/newsletter');
+            Image::create([
+                'action_id' => $action->id,
+                'path' => $attributes['image']
+            ]);
+        }
     }
 
     public function resetImage(): void

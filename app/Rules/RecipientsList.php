@@ -18,11 +18,11 @@ class RecipientsList implements ValidationRule
        $recipients = explode(',', $value);
         foreach ($recipients as $recipient)
         {
-            if(!preg_match('/^@[a-z0-9_]{5,}$/', trim($recipient)))
+            if(!preg_match('/^https:\/\/t.me\/[A-z0-9\/]{5,32}(\/[0-9])*$/', trim($recipient)))
             {
                 $fail('
-                    Каждый username должен начинаться с символа @ и отделяться запятой от предыдущего,
-                    так же username должен быть корректным по правилам Телеграм
+                    Каждый получатель(приватный чат, группа, подгруппа) должен быть корректной tg URLs скопированной из профиля и
+                    отделённой от предыдущей запятой ",".
                 ');
             }
         }
