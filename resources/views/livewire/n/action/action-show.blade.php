@@ -1,4 +1,4 @@
-<div>
+<div wire:key="action-show-{{$action->id}}">
     <div class="mb-3">
         <div class="row align-items-center">
             <span class="col-3">Получатели:</span>
