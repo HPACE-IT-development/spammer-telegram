@@ -14,7 +14,6 @@
 
     <div class="modal-footer border-0">
         <button
-            id="closeBotCreateModal"
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal">Отменить</button>

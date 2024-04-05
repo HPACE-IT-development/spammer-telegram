@@ -4,13 +4,16 @@ namespace App\Livewire\N\Action;
 
 use App\Livewire\Forms\ActionCreateNewsletterForm;
 use App\Models\ActionType;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ActionCreate extends Component
 {
-    public ActionCreateNewsletterForm $newsletterForm;
+    use WithFileUploads;
 
+    public ActionCreateNewsletterForm $newsletterForm;
     public string $selectedActionType = 'any';
 
     #[Computed]
@@ -25,20 +28,24 @@ class ActionCreate extends Component
     {
         if($this->selectedActionType === 'newsletter')
         {
-            if($this->newsletterForm->store()) {
-                $this->dispatch('action-index-refresh',
-                    status: 'success',
-                    message: "Успешное добавление новой задачи."
-                );
-                $this->reset();
-                $this->dispatch('hide-action-create-modal');
-            }
+            $this->newsletterForm->store();
+            $this->reset('selectedActionType');
+            $this->dispatch('action-index-refresh',
+                status: 'success',
+                message: "Успешное добавление новой задачи."
+            );
+            $this->dispatch('hide-action-create-modal');
         }
     }
 
     public function cancel(): void
     {
         $this->reset();
+    }
+
+    public function cancelUploadImage(): void
+    {
+        $this->newsletterForm->resetImage();
     }
 
     public function render()

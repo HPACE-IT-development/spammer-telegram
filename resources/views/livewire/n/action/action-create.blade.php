@@ -41,6 +41,29 @@
                             <div class="invalid-feedback">{{$message}}</div>
                             @enderror
                         </div>
+
+                        <div class="mb-3">
+                            <input
+                                wire:model="newsletterForm.image"
+                                class="form-control form-control-sm {{$errors->has('newsletterForm.image')? 'is-invalid': ''}}"
+                                type="file"
+                                placeholder="тест"
+                            >
+                            @error('newsletterForm.image')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
+
+                        @if(isset($newsletterForm->image))
+                            <div class="mx-auto position-relative" style="width: 450px; height: 250px;">
+                                <img class="img-fluid h-100" src="{{ $newsletterForm->image->temporaryUrl() }}">
+                                <button
+                                    wire:click="cancelUploadImage"
+                                    class="btn-close position-absolute top-0 end-0"
+                                    type="button"
+                                ></button>
+                            </div>
+                        @endif
                     @endif
                 </div>
                 <div class="modal-footer">
