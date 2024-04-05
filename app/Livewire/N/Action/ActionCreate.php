@@ -29,13 +29,14 @@ class ActionCreate extends Component
         if($this->selectedActionType === 'newsletter')
         {
             $this->newsletterForm->store();
-            $this->reset('selectedActionType');
             $this->dispatch('action-index-refresh',
                 status: 'success',
                 message: "Успешное добавление новой задачи."
             );
             $this->dispatch('hide-action-create-modal');
         }
+
+        $this->reset();
     }
 
     public function cancel(): void

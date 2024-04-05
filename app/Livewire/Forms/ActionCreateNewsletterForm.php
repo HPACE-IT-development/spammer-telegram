@@ -63,8 +63,6 @@ class ActionCreateNewsletterForm extends Form
             'action_id' => $action->id,
             'path' => $attributes['image']
         ]);
-
-        $this->reset();
     }
 
     public function resetImage(): void
