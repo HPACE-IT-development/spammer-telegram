@@ -11,7 +11,7 @@ class ActionCreate extends Component
 {
     public ActionCreateNewsletterForm $newsletterForm;
 
-    public string $selectedType = 'any';
+    public string $selectedActionType = 'any';
 
     #[Computed]
     public function types(): array
@@ -23,17 +23,22 @@ class ActionCreate extends Component
 
     public function save(): void
     {
-        if($this->selectedType === 'newsletter')
+        if($this->selectedActionType === 'newsletter')
         {
             if($this->newsletterForm->store()) {
                 $this->dispatch('action-index-refresh',
                     status: 'success',
                     message: "Успешное добавление новой задачи."
                 );
-                $this->selectedType = 'any';
+                $this->reset();
                 $this->dispatch('hide-action-create-modal');
             }
         }
+    }
+
+    public function cancel(): void
+    {
+        $this->reset();
     }
 
     public function render()

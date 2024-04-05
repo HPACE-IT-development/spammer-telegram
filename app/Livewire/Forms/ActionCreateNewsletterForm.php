@@ -44,7 +44,6 @@ class ActionCreateNewsletterForm extends Form
             'action_type_id' => 1
         ]);
 
-        $this->reset();
         return $action;
     }
 }

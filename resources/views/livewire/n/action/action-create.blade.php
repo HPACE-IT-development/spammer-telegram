@@ -8,16 +8,16 @@
 
             <form wire:submit="save">
                 <div class="modal-body">
-                    <select wire:model.change="selectedType" class="form-select form-select-sm mb-3">
+                    <select wire:model.change="selectedActionType" class="form-select form-select-sm mb-3">
                         @foreach($types as $key => $type)
                             <option
                                 wire:key="{{$key}}"
                                 value="{{$type['title']}}"
-                                {{($selectedType === $type['title'])? 'selected': ''}}
+                                {{($selectedActionType === $type['title'])? 'selected': ''}}
                             >{{$type['desc_ru']}}</option>
                         @endforeach
                     </select>
-                    @if($selectedType === 'newsletter')
+                    @if($selectedActionType === 'newsletter')
                         <div class="mb-3">
                             <label class="form-label mb-1" for="actionCreateNewsletterRecipients">Получатели</label>
                             <textarea
@@ -44,10 +44,22 @@
                     @endif
                 </div>
                 <div class="modal-footer">
-                    <button id="closeActionCreateModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button
+                        wire:click="cancel"
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">Закрыть</button>
                     <button type="submit" class="btn btn-primary">Добавить</button>
                 </div>
             </form>
+
+            <button
+                id="closeActionCreateModal"
+                type="button"
+                class="button"
+                data-bs-dismiss="modal"
+                style="opacity: 0; width: 1%;">
+            </button>
         </div>
     </div>
 </div>

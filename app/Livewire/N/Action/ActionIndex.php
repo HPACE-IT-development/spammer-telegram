@@ -12,7 +12,7 @@ use Livewire\Component;
 #[Layout('components.layouts.n-app')]
 class ActionIndex extends Component
 {
-    public string $displayedStatus = 'created';
+    public string $displayedActionStatus = 'created';
 
     #[Computed]
     public function actions()
