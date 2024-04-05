@@ -24,6 +24,7 @@ class BotIndex extends Component
 
     /* id выбранных ботов в int */
     public array $selectedBots = [];
+    public int $selectedBotsAmount = 0;
 
     public array $actionPerformers = [];
 
@@ -107,8 +108,14 @@ class BotIndex extends Component
     {
         $arrayKey = array_search((int) $id, $this->selectedBots);
 
-        if($arrayKey OR $arrayKey === 0) unset($this->selectedBots[$arrayKey]);
-        else $this->selectedBots[] = (int) $id;
+        if($arrayKey OR $arrayKey === 0) {
+            unset($this->selectedBots[$arrayKey]);
+            if($this->mode === 'removal') $this->selectedBotsAmount = --$this->selectedBotsAmount;
+        }
+        else {
+            $this->selectedBots[] = (int) $id;
+            if($this->mode === 'removal') $this->selectedBotsAmount = ++$this->selectedBotsAmount;
+        }
 
         if($this->mode === 'performers') unset($this->isDiffActionPerformersAndSelectedBots);
     }

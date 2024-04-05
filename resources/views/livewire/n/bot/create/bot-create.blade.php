@@ -9,10 +9,11 @@
             <livewire:dynamic-component :is="$currentStep" :bot="$bot" :key="$currentStep"/>
 
             <button
-                id="closeBotCreateModalJS"
+                id="closeBotCreateModal"
                 type="button"
-                class="d-none"
-                data-bs-dismiss="modal">
+                class="button"
+                data-bs-dismiss="modal"
+                style="opacity: 0; width: 1%;">
             </button>
         </div>
     </div>
@@ -23,7 +24,7 @@
     document.addEventListener('livewire:initialized', () => {
         console.log('test');
         $wire.on('hide-bot-create-modal', () => {
-            let element = document.getElementById('closeBotCreateModalJS');
+            let element = document.getElementById('closeBotCreateModal');
             element.dispatchEvent(new Event('click', { 'bubbles': true }));
         });
     });

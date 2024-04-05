@@ -43,7 +43,11 @@
                 </div>
             @elseif($mode === 'removal')
                 <div>
-                    <button wire:click="acceptRemoval" class="btn btn-primary btn-sm">Сохранить</button>
+                    <button
+                        wire:click="acceptRemoval"
+                        class="btn btn-primary btn-sm"
+                        {{($selectedBotsAmount === 0)? 'disabled': ''}}
+                    >Сохранить</button>
                     <button wire:click="cancelRemoval" class="btn btn-danger btn-sm">Отменить</button>
                 </div>
             @endif
