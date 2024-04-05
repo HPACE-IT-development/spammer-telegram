@@ -44,4 +44,8 @@ class Action extends Model
         return $this->belongsToMany(Bot::class, 'performers', 'action_id', 'bot_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'action_id', 'id');
+    }
 }
