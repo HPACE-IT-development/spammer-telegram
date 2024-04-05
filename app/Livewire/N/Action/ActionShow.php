@@ -29,11 +29,12 @@ class ActionShow extends Component
 
     public function deleteAction(): void
     {
+        $this->reset('visibleElement');
         $this->action->delete();
         $this->dispatch('action-index-refresh',
             status: 'success',
             message: "Успешное удаление задачи."
-        );
+        )->to(ActionIndex::class);
     }
 
     public function render()

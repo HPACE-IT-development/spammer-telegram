@@ -1,4 +1,4 @@
-<div wire:key="action-show-{{$action->id}}">
+<div>
     <div class="mb-3">
         <div class="row align-items-center">
             <span class="col-3">Получатели:</span>
@@ -9,7 +9,7 @@
         </div>
 
         @if($visibleElement === 'recipients')
-            <div wire:transition >
+            <div wire:transition>
                 @foreach($action->recipients as $recipient)
                     {{($loop->last)? "$recipient": "$recipient,"}}
                 @endforeach
@@ -51,10 +51,11 @@
         @endif
     </div>
 
-    <div>
+    @if(isset($action))
         @if($action->status->title === 'created')
             <button wire:click="performJob" type="button" class="btn btn-primary btn-sm">Выполнить задачу</button>
         @endif
+
         <button wire:click="deleteAction" type="button" class="btn btn-danger btn-sm">Удалить задачу</button>
-    </div>
+    @endif
 </div>

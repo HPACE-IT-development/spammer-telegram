@@ -1,10 +1,12 @@
 <div class="container p-5">
+
     @if(session()->has('success'))
         <div class="alert alert-success alert-dismissible fade show">
             {{session()->get('success')}}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+
     <div class="row">
         <div class="col-8">
             Фильтры
@@ -19,8 +21,9 @@
             </button>
         </div>
     </div>
-    @if($actions->isNotEmpty())
-        <div class="row mt-3">
+
+    <div class="row mt-3">
+        @if($actions->isNotEmpty())
             <div class="col-4 list-group ps-2">
                 @foreach($actions as $collectionKey => $action)
                     <x-n.action.action-index-simple-item
@@ -33,16 +36,14 @@
             </div>
 
             <div class="col-8">
-                @if($activeAction)
-                    <livewire:n.action.action-show :action="$activeAction" :key="$activeAction->id"/>
-                @endif
+                <livewire:n.action.action-show :action="$activeAction" :key="$activeAction->id"/>
             </div>
-        </div
-    @else
-        <div class="text-center pt-5">
-            <span>Вы пока не добавили ни одной задачи.</span>
-        </div>
-    @endif
+        @else
+            <div class="text-center pt-5">
+                <span>Вы пока не добавили ни одной задачи.</span>
+            </div>
+        @endif
+    </div>
 
     <livewire:n.action.action-create/>
 </div>
