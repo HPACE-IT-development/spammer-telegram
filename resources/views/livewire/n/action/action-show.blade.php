@@ -9,7 +9,7 @@
         </div>
 
         @if($visibleElement === 'recipients')
-            <div wire:transition>
+            <div wire:transition class="mt-2">
                 @foreach($action->recipients as $recipient)
                     {{($loop->last)? "$recipient": "$recipient,"}}
                 @endforeach
@@ -27,8 +27,15 @@
         </div>
 
         @if($visibleElement === 'text')
-            <div wire:transition class="text-break">
-                {{$action->text}}
+            <div>
+                <div wire:transition class="text-break text-center mt-2">
+                    {{$action->text}}
+                </div>
+                @if(isset($action->first_image))
+                    <div class="mx-auto mt-2" style="max-width: 480px; max-height: 270px;">
+                        <img class="img-fluid h-100" src="{{ $action->first_image }}">
+                    </div>
+                @endif
             </div>
         @endif
     </div>
@@ -53,9 +60,19 @@
 
     @if(isset($action))
         @if($action->status->title === 'created')
-            <button wire:click="performJob" type="button" class="btn btn-primary btn-sm">Выполнить задачу</button>
+            <button
+                wire:click="performJob"
+                type="button"
+                class="btn btn-primary btn-sm"
+                {{($action->performers->isEmpty())? 'disabled': ''}}
+            >Выполнить задачу</button>
         @endif
 
-        <button wire:click="deleteAction" type="button" class="btn btn-danger btn-sm">Удалить задачу</button>
+        <button
+            wire:click="deleteAction"
+            type="button"
+            class="btn btn-danger btn-sm"
+        >Удалить задачу</button>
     @endif
+
 </div>

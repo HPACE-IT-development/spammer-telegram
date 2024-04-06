@@ -60,7 +60,7 @@ class ActionCreateNewsletterForm extends Form
             $path = $attributes['image']->store('action/newsletter');
             Image::create([
                 'action_id' => $action->id,
-                'path' => $attributes['image']
+                'path' => $path
             ]);
         }
 

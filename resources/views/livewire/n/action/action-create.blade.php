@@ -55,7 +55,7 @@
                         </div>
 
                         @if(isset($newsletterForm->image))
-                            <div class="mx-auto position-relative" style="width: 450px; height: 250px;">
+                            <div class="mx-auto position-relative" style="max-width: 480px; max-height: 270px;">
                                 <img class="img-fluid h-100" src="{{ $newsletterForm->image->temporaryUrl() }}">
                                 <button
                                     wire:click="cancelUploadImage"
