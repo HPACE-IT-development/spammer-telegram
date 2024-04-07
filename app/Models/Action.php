@@ -30,9 +30,14 @@ class Action extends Model
         return json_decode($value);
     }
 
-    public function getFirstImageAttribute(): ?string
+    public function getFirstImageUrlAttribute(): ?string
     {
         return ($this->images->first())? Storage::url($this->images->first()->path): null;
+    }
+
+    public function getFirstImageFullPathAttribute(): ?string
+    {
+        return ($this->images->first())? Storage::path($this->images()->first()->path): null;
     }
 
     public function status()

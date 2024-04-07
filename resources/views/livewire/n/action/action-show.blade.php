@@ -31,9 +31,9 @@
                 <div class="text-break text-center mt-2">
                     {{$action->text}}
                 </div>
-                @if(isset($action->first_image))
+                @if(isset($action->first_image_url))
                     <div class="mx-auto mt-2" style="max-width: 480px; max-height: 270px;">
-                        <img class="img-fluid h-100" src="{{ $action->first_image }}">
+                        <img class="img-fluid h-100" src="{{ $action->first_image_url }}">
                     </div>
                 @endif
             </div>
@@ -74,5 +74,4 @@
             class="btn btn-danger btn-sm"
         >Удалить задачу</button>
     @endif
-
 </div>
