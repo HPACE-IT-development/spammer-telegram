@@ -16,20 +16,22 @@ class ActionStatusSeeder extends Seeder
         DB::table('action_statuses')->insert([
             [
                 'title' => 'created',
-                'description' => 'Создан'
+                'description' => 'Создана'
             ],
+
+            [
+                'title' => 'in queue',
+                'description' => 'В очереди'
+            ],
+
             [
                 'title' => 'at work',
                 'description' => 'В работе'
             ],
             [
-                'title' => 'success',
-                'description' => 'Успех'
+                'title' => 'done',
+                'description' => 'Заверешена'
             ],
-            [
-                'title' => 'fail',
-                'description' => 'Неудача'
-            ]
         ]);
     }
 }

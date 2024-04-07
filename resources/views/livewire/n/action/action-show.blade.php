@@ -58,6 +58,12 @@
         @endif
     </div>
 
+    @if($poll)
+        <div wire:poll>
+            {{$report->test}}
+        </div>
+    @endif
+
     @if(isset($action))
         @if($action->status->title === 'created')
             <button

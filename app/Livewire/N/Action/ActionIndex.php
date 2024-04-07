@@ -18,7 +18,8 @@ class ActionIndex extends Component
 
     public function mount()
     {
-        $this->updateActiveAction();
+        $this->actualizeActiveAction();
+        $this->forgetSession(['success', 'danger', 'warning']);
     }
 
     #[Computed]
@@ -30,39 +31,54 @@ class ActionIndex extends Component
         return $builder->orderBy('created_at', 'desc')->get();
     }
 
+    #[Computed]
+    public function isThereStatusInQueueOrAtWork()
+    {
+        return Action::where('user_id', auth()->user()->id)
+            ->whereHas('status', function ($query) {
+                $query->where('title', 'in queue')
+                    ->orWhere('title', 'at work');
+            })
+            ->get();
+    }
+
+    #[Computed]
+    public function isActiveActionStatusAtWork(): bool
+    {
+        return $this->activeAction->status->title === 'at work';
+    }
+
     public function toggleActiveAction($collectionKey): void
     {
         $this->activeAction = $this->actions->get($collectionKey);
     }
 
     #[On('action-index-refresh-after-create')]
-    public function refreshComponentAfterCreate($status, $message): void
+    public function refreshComponentAfterCreate(): void
     {
-        $this->refreshComponent($status, $message);
-        $this->updateActiveAction();
+        $this->refreshComponent(status: 'success', message: "Успешное добавление новой задачи.");
+        $this->actualizeActiveAction();
     }
 
-    #[On('active-index-delete-active-action')]
+    #[On('action-index-delete-active-action')]
     public function deleteActiveAction(): void
     {
-        $type = $this->activeAction->type->desc_ru;
-        $id = $this->activeAction->id;
-
         $this->activeAction->delete();
-        $this->updateActiveAction();
-        $this->refreshComponent(
-            status: 'success',
-            message: "$type #$id успешное удаление."
-        );
+        $this->actualizeActiveAction();
     }
 
     #[On('action-index-refresh')]
-    public function refreshComponent($status, $message): void
+    public function refreshComponent($status = null, $message = null): void
     {
-        session()->flash($status, $message);
+        if(isset($status)) session()->put($status, $message);
     }
 
-    public function updateActiveAction(): void
+    public function forgetSession(array $keys): void
+    {
+        session()->forget($keys);
+    }
+
+    public function actualizeActiveAction(): void
     {
         $this->activeAction = ($this->actions->isNotEmpty())? $this->actions->first(): null;
     }
@@ -72,7 +88,9 @@ class ActionIndex extends Component
     {
         return view('livewire.n.action.action-index', [
             'actions' => $this->actions,
-            'activeAction' => $this->activeAction
+            'activeAction' => $this->activeAction,
+            'isThereStatusInQueueOrAtWork' => $this->isThereStatusInQueueOrAtWork,
+            'isActiveActionStatusAtWork' => $this->isActiveActionStatusAtWork()
         ]);
     }
 }

@@ -32,10 +32,7 @@ class ActionCreate extends Component
             $this->reset('selectedActionType');
             $this->dispatch('hide-action-create-modal')
                 ->self();
-            $this->dispatch('action-index-refresh-after-create',
-                status: 'success',
-                message: "Успешное добавление новой задачи."
-            )
+            $this->dispatch('action-index-refresh-after-create')
                 ->to(ActionIndex::class);
         }
     }

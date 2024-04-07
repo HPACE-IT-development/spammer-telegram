@@ -19,9 +19,9 @@ class Action extends Model
     {
         return match ($this->action_status_id) {
             1 => 'primary',
-            2 => 'warning',
-            3 => 'success',
-            4 => 'danger',
+            2 => 'info',
+            3 => 'warning',
+            4 => 'success',
             default => 'light'
         };
     }

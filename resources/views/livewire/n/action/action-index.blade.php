@@ -3,7 +3,7 @@
     @if(session()->has('success'))
         <div class="alert alert-success alert-dismissible fade show">
             {{session()->get('success')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button wire:click="forgetSession(['success'])" type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
@@ -24,7 +24,7 @@
 
     <div class="row mt-3">
         @if($actions->isNotEmpty())
-            <div class="col-4 list-group ps-2">
+            <div {{($isThereStatusInQueueOrAtWork)? 'wire:poll': ''}} class="col-4 list-group ps-2">
                 @foreach($actions as $collectionKey => $action)
                     <x-n.action.action-index-simple-item
                         wire:click="toggleActiveAction"
@@ -36,7 +36,11 @@
             </div>
 
             <div class="col-8">
-                <livewire:n.action.action-show :action="$activeAction" :key="$activeAction->id"/>
+                <livewire:n.action.action-show
+                    :action="$activeAction"
+                    :key="$activeAction->id.'-'.$isActiveActionStatusAtWork"
+                    :poll="$isActiveActionStatusAtWork"
+                />
             </div>
         @else
             <div class="text-center pt-5">
