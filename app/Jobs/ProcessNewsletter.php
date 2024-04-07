@@ -20,9 +20,17 @@ class ProcessNewsletter implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected Action $action;
+    protected int $sleepingTime;
+
+    protected int $timeout;
+
     public function __construct(Action $action)
     {
         $this->action = $action;
+        $this->sleepingTime = 5;
+
+        $recipients_amount = $action->recipients_collection->count();
+        $this->timeout = ($recipients_amount * $this->sleepingTime) + ($recipients_amount * 3) + ($recipients_amount * 2);
     }
 
 
@@ -62,6 +70,13 @@ class ProcessNewsletter implements ShouldQueue
             }
 
             $results = \Amp\Future\await($awaitingResults);
+
+            /* Если получателей больше нет => все сообщения отправлены */
+            if($recipientsCollections->isEmpty()) {
+                // отчет
+            } else {
+                sleep($this->sleepingTime);
+            }
             Log::debug($results);
         }
     }

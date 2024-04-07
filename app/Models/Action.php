@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class Action extends Model
@@ -28,6 +29,11 @@ class Action extends Model
     public function getRecipientsAttribute($value): array
     {
         return json_decode($value);
+    }
+
+    public function getRecipientsCollectionAttribute(): Collection
+    {
+        return collect($this->recipients);
     }
 
     public function getFirstImageUrlAttribute(): ?string
