@@ -6,6 +6,7 @@ use App\Helpers\MadelineHelper;
 use App\Models\Action;
 use Carbon\Carbon;
 use danog\MadelineProto\API;
+use danog\MadelineProto\LocalFile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -45,10 +46,18 @@ class ProcessNewsletter implements ShouldQueue
                 $recipient = $recipientsCollections->shift();
 
                 if(!empty($recipient)) {
-                    $awaitingResults[] = \Amp\async(fn () => $session->messages ->sendMessage(
-                        peer: $recipient,
-                        message: $this->action->text
-                    ));
+                    if($this->action->first_image_full_path) {
+                        $awaitingResults[] = \Amp\async(fn () => $session->sendPhoto(
+                            peer: $recipient,
+                            file: new LocalFile($this->action->first_image_full_path),
+                            caption: $this->action->text
+                        ));
+                    } else {
+                        $awaitingResults[] = \Amp\async(fn () => $session->messages->sendMessage(
+                            peer: $recipient,
+                            message: $this->action->text
+                        ));
+                    }
                 } else break;
             }
 
