@@ -3,6 +3,8 @@
 namespace App\Livewire\N\Bot;
 
 use App\Helpers\MadelineHelper;
+use App\Livewire\N\Action\ActionIndex;
+use App\Livewire\N\Action\ActionShow;
 use App\Models\Action;
 use App\Models\Bot;
 use App\Models\BotStatus;
@@ -167,9 +169,11 @@ class BotIndex extends Component
             $this->dispatch('action-index-refresh',
                 status: 'success',
                 message: "{$this->action->type->desc_ru} # {$this->action->id}: Успешное добавление исполнителей."
-            );
+            )
+                ->to(ActionIndex::class);
 
-            $this->dispatch('action-show-toggle', 'performers');
+            $this->dispatch('action-show-toggle', 'performers')
+                ->to(ActionShow::class);
         }
     }
 

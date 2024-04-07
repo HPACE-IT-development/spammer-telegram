@@ -27,8 +27,8 @@
         </div>
 
         @if($visibleElement === 'text')
-            <div>
-                <div wire:transition class="text-break text-center mt-2">
+            <div wire:transition>
+                <div class="text-break text-center mt-2">
                     {{$action->text}}
                 </div>
                 @if(isset($action->first_image))
