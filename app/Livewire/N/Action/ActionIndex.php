@@ -43,9 +43,9 @@ class ActionIndex extends Component
     }
 
     #[Computed]
-    public function isActiveActionStatusAtWork(): bool
+    public function isActiveActionStatusAtWork(): ?bool
     {
-        return $this->activeAction->status->title === 'at work';
+        return (!isset($this->activeAction))? null: ($this->activeAction->status->title === 'at work');
     }
 
     public function toggleActiveAction($collectionKey): void

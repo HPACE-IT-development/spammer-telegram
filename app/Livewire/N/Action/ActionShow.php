@@ -16,16 +16,14 @@ use Livewire\Component;
 
 class ActionShow extends Component
 {
-    public int $test = 0;
-
     public ?Action $action;
-    public bool $poll;
+    public ?bool $poll;
     public ?string $visibleElement = null;
 
     #[Computed]
     public function report()
     {
-        return ($this->poll)? Report::where('action_id', $this->action->id)->first(): null;
+        return (!empty($this->poll))? Report::where('action_id', $this->action->id)->first(): null;
     }
 
     #[On('action-show-toggle')]
@@ -48,11 +46,6 @@ class ActionShow extends Component
         $this->reset();
         $this->dispatch('action-index-delete-active-action')
             ->to(ActionIndex::class);
-    }
-
-    public function testInc(): void
-    {
-        $this->test = $this->test + 1;
     }
 
     public function render()
