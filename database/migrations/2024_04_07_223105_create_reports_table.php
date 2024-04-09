@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('sessions_errors')->nullable()->default(null);
             $table->json('info_about_recipients')->nullable()->default(null);
             $table->unsignedInteger('total_recipients_amount')->default(0);
-            $table->unsignedInteger('completed_recipients_amount')->nullable()->default(null);
+            $table->unsignedInteger('completed_recipients_amount')->default(0);
             $table->timestamps();
 
             $table->foreign('action_id')
