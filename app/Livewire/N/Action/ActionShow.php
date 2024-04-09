@@ -20,12 +20,6 @@ class ActionShow extends Component
     public ?bool $poll;
     public ?string $visibleElement = null;
 
-    #[Computed]
-    public function report()
-    {
-        return (!empty($this->poll))? Report::where('action_id', $this->action->id)->first(): null;
-    }
-
     #[On('action-show-toggle')]
     public function toggleVisibleElement($field): void
     {
@@ -50,6 +44,6 @@ class ActionShow extends Component
 
     public function render()
     {
-        return view('livewire.n.action.action-show', ['report' => $this->report]);
+        return view('livewire.n.action.action-show');
     }
 }

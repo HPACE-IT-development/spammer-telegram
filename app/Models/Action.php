@@ -46,6 +46,11 @@ class Action extends Model
         return ($this->images->first())? Storage::path($this->images()->first()->path): null;
     }
 
+    public function getCompletionPercentageAttribute(): int
+    {
+        return (100*$this->completed_recipients_amount) / $this->total_recipients_amount;
+    }
+
     public function status()
     {
         return $this->belongsTo(ActionStatus::class, 'action_status_id', 'id');
@@ -66,8 +71,8 @@ class Action extends Model
         return $this->hasMany(Image::class, 'action_id', 'id');
     }
 
-    public function reports()
+    public function report()
     {
-        return $this->hasMany(Report::class, 'action_id', 'id');
+        return $this->hasOne(Report::class, 'action_id', 'id');
     }
 }

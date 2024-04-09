@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('action_id');
-            $table->unsignedTinyInteger('report_status_id');
+            $table->unsignedTinyInteger('report_status_id')->nullable()->default(null);
             $table->json('sessions_errors')->nullable()->default(null);
             $table->json('info_about_recipients')->nullable()->default(null);
-            $table->unsignedInteger('total_recipients_amount');
+            $table->unsignedInteger('total_recipients_amount')->default(0);
             $table->unsignedInteger('completed_recipients_amount')->nullable()->default(null);
             $table->timestamps();
 

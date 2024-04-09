@@ -29,7 +29,7 @@ class ProcessNewsletter implements ShouldQueue
     public function __construct(Action $action)
     {
         $this->action = $action;
-        $this->sleepingTime = 20;
+        $this->sleepingTime = 7;
 
         $recipients_amount = $action->recipients_collection->count();
         $this->timeout = ($recipients_amount * $this->sleepingTime) + ($recipients_amount * 3) + ($recipients_amount * 2);
@@ -39,7 +39,8 @@ class ProcessNewsletter implements ShouldQueue
     public function handle(): void
     {
         $this->action->update(['action_status_id' => 3]);
-        $report = Report::create(['action_id' => $this->action->id]);
+        $report = Report::create([
+            'action_id' => $this->action->id]);
 
         $madelineSessions = collect([]);
         $madelineSessionsReports = [];
@@ -104,7 +105,7 @@ class ProcessNewsletter implements ShouldQueue
                             'sent' => true
                         ];
                     }
-                    $completedRecipientsAmount = $completedRecipientsAmount++;
+                    $completedRecipientsAmount = ++$completedRecipientsAmount;
                 }
 
                 /* Если получателей больше нет => все сообщения отправлены */

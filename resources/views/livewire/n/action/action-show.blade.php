@@ -58,9 +58,9 @@
         @endif
     </div>
 
-    @if(!empty($poll))
+    @if(!empty($poll) AND $action->report)
         <div wire:poll>
-            {{$report->test}}
+            {{$action->report->completed_recipients_amount}} of {{$action->report->total_recipients_amount}}
         </div>
     @endif
 
