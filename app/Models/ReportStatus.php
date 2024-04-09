@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Report extends Model
+class ReportStatus extends Model
 {
     use HasFactory;
 
-    protected $table = 'reports';
+    public $timestamps = false;
     protected $primaryKey = 'id';
+    protected $table = 'report_statuses';
     protected $guarded = [];
 }

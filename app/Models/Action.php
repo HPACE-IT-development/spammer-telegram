@@ -65,4 +65,9 @@ class Action extends Model
     {
         return $this->hasMany(Image::class, 'action_id', 'id');
     }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'action_id', 'id');
+    }
 }
