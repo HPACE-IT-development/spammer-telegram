@@ -58,7 +58,7 @@
         @endif
     </div>
 
-    @if($poll)
+    @if(!empty($poll))
         <div wire:poll>
             {{$report->test}}
         </div>

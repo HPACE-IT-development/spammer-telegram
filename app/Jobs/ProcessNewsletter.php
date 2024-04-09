@@ -39,54 +39,96 @@ class ProcessNewsletter implements ShouldQueue
     public function handle(): void
     {
         $this->action->update(['action_status_id' => 3]);
-
         $report = Report::create(['action_id' => $this->action->id]);
 
-        $madelineSessions = [];
-
+        $madelineSessions = collect([]);
+        $madelineSessionsReports = [];
         foreach ($this->action->performers as $performer) {
-            $madelineSessions[] = new API(MadelineHelper::getMadelineFullPath($performer->phone));
+            try {
+                $madelineSessions->push(new API(MadelineHelper::getMadelineFullPath($performer->phone)));
+            } catch (\Throwable $e) {
+                $madelineSessionsReports[$performer->phone] = $e->getMessage();
+                continue;
+            }
         }
 
         $recipientsCollections = collect($this->action->recipients);
+        $report->update(['total_recipients_amount' => $recipientsCollections->count()]);
+        if($madelineSessions->isNotEmpty()) {
+            $infoAboutRecipients = [];
+            $completedRecipientsAmount = 0;
+            while ($recipientsCollections->isNotEmpty()) {
+                $awaitingResults = [];
 
-        while ($recipientsCollections->isNotEmpty()) {
-            $awaitingResults = [];
+                foreach ($madelineSessions as $session) {
+                    $recipient = $recipientsCollections->shift();
 
-            foreach ($madelineSessions as $session) {
-                $recipient = $recipientsCollections->shift();
-
-                if (!empty($recipient)) {
-                    $awaitingResults[] = \Amp\async(function () use ($session, $recipient) {
-                        try {
-                            if ($this->action->first_image_full_path) {
-                                return $session->sendPhoto(
-                                    peer: $recipient,
-                                    file: new RemoteUrl($this->action->first_image_url),
-                                    caption: $this->action->text
-                                );
-                            } else {
-                                return $session->messages->sendMessage(
-                                    peer: $recipient,
-                                    message: $this->action->text
-                                );
+                    if (!empty($recipient)) {
+                        $awaitingResults[] = \Amp\async(function () use ($session, $recipient) {
+                            try {
+                                if ($this->action->first_image_full_path) {
+                                    return $session->messages->sendMedia(
+                                        peer: $recipient,
+                                        media: [
+                                            '_' => 'inputMediaUploadedPhoto',
+                                            'file' => new RemoteUrl($this->action->first_image_url)
+                                        ],
+                                        message: $this->action->text
+                                    );
+                                } else {
+                                    return $session->messages->sendMessage(
+                                        peer: $recipient,
+                                        message: $this->action->text
+                                    );
+                                }
+                            } catch (\Throwable $e) {
+                                return [
+                                    'recipient' => $recipient,
+                                    'message' => $e->getMessage(),
+                                    'error' => true
+                                ];
                             }
-                        } catch (\Throwable $e) {
-                            return $e->getMessage();
-                        }
-                    });
-                } else break;
-            }
+                        });
+                    } else break;
+                }
 
-            $results = \Amp\Future\await($awaitingResults);
-            $report->update(['test' => $report->test + 20]);
-            /* Если получателей больше нет => все сообщения отправлены */
-            if ($recipientsCollections->isEmpty()) {
-                $this->action->update(['action_status_id' => 4]);
-            } else {
-                sleep($this->sleepingTime);
+                $results = \Amp\Future\await($awaitingResults);
+                foreach ($results as $result) {
+                    if(isset($result['error'])) {
+                        $infoAboutRecipients[$result['recipient']] = [
+                            'sent' => false,
+                            'message' => $result['message']
+                        ];
+                    } else {
+                        $infoAboutRecipients[$result['request']['body']['peer']] = [
+                            'sent' => true
+                        ];
+                    }
+                    $completedRecipientsAmount = $completedRecipientsAmount++;
+                }
+
+                /* Если получателей больше нет => все сообщения отправлены */
+                if ($recipientsCollections->isEmpty()) {
+                    $reportDataset = [
+                        'completed_recipients_amount' => $completedRecipientsAmount,
+                        'info_about_recipients' => json_encode($infoAboutRecipients),
+                        'report_status_id' => 1
+                    ];
+
+                    if($madelineSessionsReports) $reportDataset['sessions_errors'] = json_encode($madelineSessionsReports);
+
+                    $report->update($reportDataset);
+                    $this->action->update(['action_status_id' => 4]);
+                } else {
+                    $report->update(['completed_recipients_amount' => $completedRecipientsAmount]);
+                    sleep($this->sleepingTime);
+                }
             }
-            Log::debug($results);
+        } else {
+            $report->update([
+                'report_status_id' => 2,
+                'sessions_errors' => json_encode($madelineSessionsReports)
+            ]);
         }
     }
 }
