@@ -16,7 +16,7 @@ class ReportStatusSeeder extends Seeder
         DB::table('report_statuses')->insert([
             [
                 'title' => 'success',
-                'desc_ru' => 'Выполнена успешно'
+                'desc_ru' => 'Успешное выполнение задачи'
             ],
 
             [

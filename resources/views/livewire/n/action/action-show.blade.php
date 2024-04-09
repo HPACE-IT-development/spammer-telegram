@@ -1,5 +1,13 @@
 <div>
     <div class="mb-3">
+        <h4 class="h4">
+            {{$action->type->desc_ru}}
+             #{{$action->id}}
+             ({{$action->status->description}})
+        </h4>
+    </div>
+
+    <div class="mb-3">
         <div class="row align-items-center">
             <span class="col-3">Получатели:</span>
             <button
@@ -58,26 +66,97 @@
         @endif
     </div>
 
+    @if($action->status->title === 'done')
+        <div class="mb-3 mt">
+            <div class="row align-items-center">
+                <span class="col-3">Отчет:</span>
+                <button
+                    wire:click="toggleVisibleElement('report')"
+                    class="col-8 btn btn-light"
+                >
+                    {{($visibleElement === 'report')? 'Скрыть': 'Показать'}}
+                </button>
+            </div>
+
+            @if($visibleElement === 'report')
+                <div wire:transition class="mt-4" style="font-size: 0.9em">
+                    <div class="row">
+                        <div class="col col-3">Начало и Завершение:</div>
+                        <div class="col col-8 text-center">{{$action->report->created_at}} <br> {{$action->report->updated_at}}</div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col col-3">Статус:</div>
+                        <div class="col col-8 text-center">{{$action->report->status->desc_ru}}</div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col col-3">Сессии:</div>
+                        <div class="col col-8 text-center">
+                            @if($action->report->sessions_erros)
+                                @foreach($action->report->sessions_erros as $phone => $message)
+                                    <div class="d-flex flex-column mt-2 align-items-center" style="font-size: 0.8em;">
+                                        <div>{{$phone}}</div>
+                                        <div>{{$message}}</div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div>Ошибки отсутствуют</div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col col-3">Ошибки получаетелей:</div>
+                        <div class="col col-8">
+                            @foreach($action->report->info_about_recipients as $recipient => $info)
+                                @if(!$info['sent'])
+                                    <div class="d-flex flex-column mt-2 align-items-center" style="font-size: 0.8em;">
+                                        <div>{{$recipient}}:</div>
+                                        <div>{{$info['message']}}</div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+    @endif
+
     @if(!empty($poll) AND $action->report)
         <div wire:poll>
-            {{$action->report->completed_recipients_amount}} of {{$action->report->total_recipients_amount}}
+            {
+            <div class="progress w-75 mx-auto">
+                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                     style="width: {{$action->report->completion_percentage}}%"
+                >
+                    %{{$action->report->completion_percentage}}
+                </div>
+            </div>
         </div>
     @endif
 
     @if(isset($action))
-        @if($action->status->title === 'created')
-            <button
-                wire:click="performJob"
-                type="button"
-                class="btn btn-primary btn-sm"
-                {{($action->performers->isEmpty())? 'disabled': ''}}
-            >Выполнить задачу</button>
-        @endif
+        <div>
+            @if($action->status->title === 'created')
+                <button
+                    wire:click="performJob"
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    {{($action->performers->isEmpty())? 'disabled': ''}}
+                >Выполнить задачу
+                </button>
+            @endif
 
-        <button
-            wire:click="deleteAction"
-            type="button"
-            class="btn btn-danger btn-sm"
-        >Удалить задачу</button>
+            @if($action->status->title === 'created' OR $action->status->title === 'done')
+                <button
+                    wire:click="deleteAction"
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                >Удалить задачу
+                </button>
+            @endif
+        </div>
     @endif
 </div>
