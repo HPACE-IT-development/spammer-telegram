@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
              ReportStatusSeeder::class
          ]);
 
-//         \App\Models\Bot::factory(6)->create();
+         \App\Models\Bot::factory(6)->create();
 //         \App\Models\BotGroup::factory(5)->create();
 
         // \App\Models\User::factory()->create([

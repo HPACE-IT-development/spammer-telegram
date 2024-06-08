@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/spammer
+    restart: always
+    networks:
+      - spammer
+    depends_on:
+      - php
+      - mysql
+      - phpmyadmin
+  php:
+    container_name: spammer-php
+    ports:
+      - "5173:5173"
+    build: ./__docker/php
+    volumes:
+      - .:/var/www/spammer
+    restart: always
+    networks:
+      - spammer
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: always
+    networks:
+      - spammer
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - "33060:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    restart: always
+    networks:
+      - spammer
+  composer:
+    image: composer:latest
+    working_dir: /var/www/spammer
+    volumes:
+      - .:/var/www/spammer
+    user: "1000:1000"
+    entrypoint: ["composer"]
+    networks:
+      - spammer
+networks:
+  spammer:
+    driver: bridge
