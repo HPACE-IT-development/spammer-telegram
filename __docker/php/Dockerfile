@@ -7,7 +7,6 @@ RUN apk update && apk add \
     curl \
     nodejs \
     npm
-
 RUN docker-php-ext-install pdo pdo_mysql
 
 RUN rm -rf /var/cache/apk/* && docker-php-source delete

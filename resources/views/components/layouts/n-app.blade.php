@@ -12,13 +12,23 @@
         <div class="container">
             <span class="navbar-brand h1 fs-2 m-0">HPACE</span>
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="{{action(\App\Livewire\N\Bots::class)}}" class="nav-link">Боты</a>
-                </li>
+                @auth
+                    <li class="nav-item">
+                        <a href="{{action(\App\Livewire\N\Bots::class)}}" class="nav-link">Боты</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a href="{{action(\App\Livewire\N\Action\ActionIndex::class)}}" class="nav-link">Задачи</a>
-                </li>
+                    <li class="nav-item">
+                        <a href="{{action(\App\Livewire\N\Action\ActionIndex::class)}}" class="nav-link">Задачи</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{action(\App\Livewire\Logout::class)}}" class="nav-link">Выход</a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a href="{{action(\App\Livewire\Logout::class)}}" class="nav-link">Вход</a>
+                    </li>
+                @endauth
             </ul>
         </div>
     </div>

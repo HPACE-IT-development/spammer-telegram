@@ -11,50 +11,50 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-        <div class="d-flex justify-content-between px-4 py-3">
-            <div>
-                <select wire:model.change="botStatusTitleFilter" class="form-select form-select-sm" name="">
-                    @foreach($filtrationStatuses as $key => $status)
-                        <option
-                            wire:key="{{$status['id']}}"
-                            value="{{$status['title']}}"
-                            {{($botStatusTitleFilter === $status['title'])? 'selected': ''}}
-                        >{{$status['desc_ru']}}</option>
-                    @endforeach
-                </select>
+
+        <div class="row pt-5 pb-3 gx-0 justify-content-between">
+            <div class="col-5 row gx-1">
+                <div class="col">
+                    <label for="searchByPhoneNumber" class="form-label">Поиск</label>
+                    <input type="text" id="searchByPhoneNumber" class="form-control form-control-sm"
+                           placeholder="Номер телефона" wire:model.debounce.300ms="query">
+                </div>
+
+                <div class="col">
+                    <label for="selectBotStatus" class="form-label">Статус бота</label>
+                    <select id="selectBotStatus" wire:model.change="botStatusTitleFilter"
+                            class="form-select form-select-sm" name="">
+                        @foreach($filtrationStatuses as $key => $status)
+                            <option
+                                    wire:key="{{$status['id']}}"
+                                    value="{{$status['title']}}"
+                                    {{($botStatusTitleFilter === $status['title'])? 'selected': ''}}
+                            >{{$status['desc_ru']}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
-            @if($mode === 'simple')
-                <div>
-                    <button
-                        class="btn btn-primary btn-sm"
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#botCreateModal"
-                    >Добавить аккаунт
+            <div class="col-3 btn-group h-50 align-self-end">
+                @if($mode === 'simple')
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#botCreateModal">Добавить бота
                     </button>
-
-                    <button
-                        wire:click="$set('mode', 'removal')"
-                        class="btn btn-danger btn-sm"
-                        type="button"
-                    >Удалить
-                    </button>
-                </div>
-            @elseif($mode === 'removal')
-                <div>
-                    <button
-                        wire:click="acceptRemoval"
-                        class="btn btn-primary btn-sm"
-                        {{($selectedBotsAmount === 0)? 'disabled': ''}}
-                    >Сохранить</button>
+                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown"></button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" wire:click="$set('mode', 'removal')">Удаление</a></li>
+                        <li><a class="dropdown-item">Проверить статусы ботов</a></li>
+                    </ul>
+                @elseif($mode === 'removal')
+                    <button wire:click="acceptRemoval" class="btn btn-primary btn-sm"{{($selectedBotsAmount === 0)? 'disabled': ''}}>Сохранить</button>
                     <button wire:click="cancelRemoval" class="btn btn-danger btn-sm">Отменить</button>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
     @endif
 
-    <table class="table table-hover">
+    <table class="table table-striped border border-light-subtle" style="border-collapse: collapse;">
         <thead>
         <tr>
             <th>#</th>
@@ -80,20 +80,21 @@
 
     <div>
         @if($mode === 'simple')
-            <livewire:n.bot.create.bot-create />
+            <livewire:n.bot.create.bot-create/>
         @elseif($mode === 'performers')
+            <button
+                    {{($isDiffActionPerformersAndSelectedBots)? '': 'disabled'}}
+                    wire:click="saveSelectedBots"
+                    type="button"
+                    class="btn btn-primary btn-sm">Сохранить
+            </button>
+
+            <button
+                    {{($isDiffActionPerformersAndSelectedBots)? '': 'disabled'}}
+                    wire:click="cancelSelected"
+                    type="button"
+                    class="btn btn-danger btn-sm">Отменить
+            </button>
+        @endif
     </div>
-        <div>
-            <button
-                {{($isDiffActionPerformersAndSelectedBots)? '': 'disabled'}}
-                wire:click="saveSelectedBots"
-                type="button"
-                class="btn btn-primary btn-sm">Сохранить</button>
-            <button
-                {{($isDiffActionPerformersAndSelectedBots)? '': 'disabled'}}
-                wire:click="cancelSelected"
-                type="button"
-                class="btn btn-danger btn-sm">Отменить</button>
-        </div>
-    @endif
 </div>

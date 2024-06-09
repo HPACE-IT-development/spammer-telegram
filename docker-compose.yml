@@ -15,6 +15,7 @@ services:
       - php
       - mysql
       - phpmyadmin
+      - supervisor
   php:
     container_name: spammer-php
     ports:
@@ -43,6 +44,17 @@ services:
       PMA_HOST: mysql
       PMA_PORT: 3306
     restart: always
+    networks:
+      - spammer
+  supervisor:
+    container_name: spammer-supervisor
+    build: __docker/supervisor
+    volumes:
+      - .:/var/www/spammer
+      - ./__docker/supervisor/main:/etc/supervisor
+    depends_on:
+      - mysql
+    restart: unless-stopped
     networks:
       - spammer
   composer:

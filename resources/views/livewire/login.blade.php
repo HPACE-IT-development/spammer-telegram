@@ -1,6 +1,6 @@
 <div class="w-75 mx-auto">
-    <form wire:submit="save" class="w-25 mx-auto d-flex flex-column align-items-center">
-        <h2 class="h1 mb-5">Вход</h2>
+    <form wire:submit="save" class="mt-5 w-25 mx-auto d-flex flex-column align-items-center">
+        <h2 class="h1 m-5">Вход</h2>
 
         <div class="input-group mb-3">
             <span class="input-group-text bg-body-secondary">

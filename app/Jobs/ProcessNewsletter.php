@@ -15,7 +15,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpKernel\DataCollector\LoggerDataCollector;
 
 class ProcessNewsletter implements ShouldQueue
 {
@@ -67,7 +66,7 @@ class ProcessNewsletter implements ShouldQueue
                     if (!empty($recipient)) {
                         $awaitingResults[] = \Amp\async(function () use ($session, $recipient) {
                             try {
-                                if ($this->action->first_image_full_path) {
+                                if ($this->action->first_image_url) {
                                     return $session->messages->sendMedia(
                                         peer: $recipient,
                                         media: [

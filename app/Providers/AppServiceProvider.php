@@ -22,9 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Queue::before(function (JobProcessing $event) {
-            Log::debug("getJobId: ".$event->job->getJobId());
-            Log::debug('задание: '.$event->job->payload()['displayName']);
-        });
+        //
     }
 }

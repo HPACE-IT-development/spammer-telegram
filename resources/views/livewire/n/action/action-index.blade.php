@@ -7,12 +7,36 @@
         </div>
     @endif
 
-    <div class="row">
-        <div class="col-8">
-            Фильтры
+    <div class="row pt-5 pb-4 gx-4 justify-content-between">
+
+        <div class="col-7 row gx-1">
+            <div class="col-8 row gx-1">
+                <label for="searchByPhoneNumber" class="form-label">Поиск</label>
+                <div class="col">
+                    <input type="text" id="searchByPhoneNumber" class="form-control form-control-sm"
+                           placeholder="Номер телефона">
+                </div>
+
+                <div class="col">
+                    <input type="text" id="searchByPhoneNumber" class="form-control form-control-sm"
+                           placeholder="Фрагмент текста рассылки">
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label for="selectBotStatus" class="form-label">Статус задачи</label>
+                <select id="selectBotStatus"
+                        class="form-select form-select-sm" name="">
+                    <option value="0">Любой</option>
+                    <option value="1">Создан</option>
+                    <option value="2">В очереди</option>
+                    <option value="3">В работе</option>
+                    <option value="4">Завершён</option>
+                </select>
+            </div>
         </div>
 
-        <div class="col-4 d-flex justify-content-end">
+        <div class="col-2 btn-group h-50 align-self-end">
             <button type="button"
                     class="btn btn-primary btn-sm"
                     data-bs-toggle="modal"

@@ -109,14 +109,18 @@
                     <div class="row mt-2">
                         <div class="col col-3">Ошибки получаетелей:</div>
                         <div class="col col-8">
-                            @foreach($action->report->info_about_recipients as $recipient => $info)
-                                @if(!$info['sent'])
-                                    <div class="d-flex flex-column mt-2 align-items-center" style="font-size: 0.8em;">
-                                        <div>{{$recipient}}:</div>
-                                        <div>{{$info['message']}}</div>
-                                    </div>
-                                @endif
-                            @endforeach
+                            @if($action->report->info_about_recipients)
+                                @foreach($action->report->info_about_recipients as $recipient => $info)
+                                    @if(!$info['sent'])
+                                        <div class="d-flex flex-column mt-2 align-items-center" style="font-size: 0.8em;">
+                                            <div>{{$recipient}}:</div>
+                                            <div>{{$info['message']}}</div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @else
+                                <div>Ошибки отсутствуют</div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -126,7 +130,6 @@
 
     @if(!empty($poll) AND $action->report)
         <div wire:poll>
-            {
             <div class="progress w-75 mx-auto">
                 <div class="progress-bar progress-bar-striped progress-bar-animated"
                      style="width: {{$action->report->completion_percentage}}%"
@@ -150,12 +153,22 @@
             @endif
 
             @if($action->status->title === 'created' OR $action->status->title === 'done')
-                <button
-                    wire:click="deleteAction"
-                    type="button"
-                    class="btn btn-danger btn-sm"
-                >Удалить задачу
-                </button>
+                <div class="btn-group btn-group-sm">
+                    <button
+                            wire:click="deleteAction"
+                            type="button"
+                            class="btn btn-danger"
+                    >Удалить задачу
+                    </button>
+
+                    @if($action->status->title === 'done')
+                        <button
+                                type="button"
+                                class="btn btn-primary ms-1"
+                        >Повторить задачу
+                        </button>
+                    @endif
+                </div>
             @endif
         </div>
     @endif

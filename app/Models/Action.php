@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class Action extends Model
@@ -38,7 +39,7 @@ class Action extends Model
 
     public function getFirstImageUrlAttribute(): ?string
     {
-        return ($this->images->first())? Storage::url($this->images->first()->path): null;
+        return ($this->images->first())? asset('storage/'.$this->images->first()->path): null;
     }
 
     public function getFirstImageFullPathAttribute(): ?string

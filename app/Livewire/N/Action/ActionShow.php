@@ -32,6 +32,7 @@ class ActionShow extends Component
         $this->action->update(['action_status_id' => 2]);
         $this->dispatch('action-index-refresh')
             ->to(ActionIndex::class);
+        $this->action->load('images');
         ProcessNewsletter::dispatch($this->action);
     }
 

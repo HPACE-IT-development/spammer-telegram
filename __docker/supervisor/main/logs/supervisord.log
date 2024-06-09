@@ -1,0 +1,2 @@
+2024-06-09 16:21:25,115 WARN received SIGQUIT indicating exit request
+2024-06-09 16:21:26,140 WARN stopped: laravel-worker_00 (terminated by SIGTERM)

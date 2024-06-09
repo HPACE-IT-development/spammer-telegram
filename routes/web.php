@@ -7,6 +7,7 @@ Route::get('/', function () {
 });
 
 Route::get('/login', \App\Livewire\Login::class);
+Route::get('/logout', \App\Livewire\Logout::class);
 Route::get('/my-bots', \App\Livewire\MyBots::class);
 Route::get('/newsletter', \App\Livewire\Newsletter::class);
 
